@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小学英语闪卡 (稳定大字版)</title>
+    <title>小学英语闪卡 (统一直排版)</title>
     <style>
         :root {
-            /* 极简系统配色 */
+            /* 极简配色 */
             --bg-color: #f2f2f7;
             --card-bg: #ffffff;
             --text-color: #000000;
@@ -17,7 +17,7 @@
         body {
             margin: 0;
             padding: 0;
-            /* 原生系统字体，干净清晰 */
+            /* 原生系统字体，无衬线 */
             font-family: system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
             height: 100vh;
@@ -43,19 +43,19 @@
             text-align: center;
         }
 
-        /* 仅在竖屏手机下显示 */
         @media screen and (orientation: portrait) and (max-width: 800px) {
             #orientation-hint { display: flex; }
         }
 
         .ignore-btn {
-            margin-top: 20px;
-            padding: 10px 25px;
+            margin-top: 25px;
+            padding: 10px 30px;
             border: 1px solid white;
             background: transparent;
             color: white;
-            border-radius: 20px;
+            border-radius: 8px;
             font-size: 1rem;
+            cursor: pointer;
         }
 
         /* ---------------- 主容器 ---------------- */
@@ -63,12 +63,12 @@
             background-color: var(--card-bg);
             width: 96%;
             height: 96%;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             padding: 15px;
             box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         /* ---------------- 1. 选卡界面 ---------------- */
@@ -82,7 +82,7 @@
         h1 {
             text-align: center;
             margin: 10px 0;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--text-color);
         }
 
@@ -91,7 +91,7 @@
             overflow-y: auto;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
+            gap: 12px;
             padding: 5px;
             align-content: start;
         }
@@ -99,15 +99,14 @@
         .unit-item {
             background: #f5f5f7;
             border: 2px solid transparent;
-            border-radius: 12px;
-            padding: 20px 10px;
+            border-radius: 10px;
+            padding: 15px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .unit-item strong { display: block; font-size: 1.1rem; color: #333; }
-        .unit-item span { font-size: 0.9rem; color: var(--gray-text); margin-top: 4px; display: block; }
+        .unit-item strong { display: block; font-size: 1.1rem; color: #333; margin-bottom: 5px; }
+        .unit-item span { font-size: 0.9rem; color: var(--gray-text); }
 
         input[type="checkbox"] { display: none; }
         input[type="checkbox"]:checked + .unit-item {
@@ -118,12 +117,12 @@
 
         .start-btn {
             margin-top: 15px;
-            padding: 18px;
+            padding: 15px;
             background-color: var(--accent-color);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 1.3rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
             font-weight: bold;
             width: 100%;
             cursor: pointer;
@@ -140,58 +139,47 @@
             display: flex;
             justify-content: space-between;
             color: var(--gray-text);
-            font-size: 1rem;
+            font-size: 0.9rem;
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
-        .info-highlight { color: var(--accent-color); font-weight: bold; }
 
-        /* 内容显示区：绝对居中 */
+        /* 文字显示区域 */
         .card-display {
             flex: 1;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; 
+            align-items: center;     /* 垂直居中 */
             width: 100%;
-            text-align: center;
             cursor: pointer;
-            overflow: hidden; /* 防止溢出 */
-            padding: 0 10px; /* 左右留一点边距 */
+            overflow-y: auto;        /* 如果句子分行太多超出屏幕，允许滚动 */
+            padding: 10px;
             box-sizing: border-box;
         }
 
         #text-content {
-            font-weight: bold;
-            line-height: 1.1;
-            color: black;
-            width: 100%;
-            /* 关键：允许长单词换行，防止撑破屏幕 */
-            word-wrap: break-word; 
+            /* 核心修改：统一的超大字体 */
+            font-weight: 700;
+            color: #000;
+            text-align: center;
+            line-height: 1.15;       /* 行高稍微紧凑一点 */
+            
+            /* 强制单词内不断行，但句子会在空格处自动换行 */
+            word-wrap: break-word;   
+            overflow-wrap: break-word;
         }
 
-        /* --- 核心字体策略：两套固定的大字体 --- */
-        
-        /* 策略 A: 单词模式 (Word Mode) - 极大 */
-        .type-word {
-            /* 横屏时：使用视口宽度的 16% 或 视口高度的 35%，取最小值以防溢出 */
-            font-size: min(16vw, 35vh); 
-        }
-        
-        /* 策略 B: 句子模式 (Sentence Mode) - 很大，但适合多行 */
-        .type-sentence {
-            /* 横屏时：使用视口宽度的 6% 或 视口高度的 12% */
-            font-size: min(6vw, 12vh);
+        /* --- 字体大小设置 --- */
+
+        /* 默认（横屏/电脑）: 8rem (非常大) */
+        #text-content {
+            font-size: 8rem; 
         }
 
-        /* 针对竖屏的单独调整 (虽然建议横屏，但必须适配) */
+        /* 竖屏手机适配: 4.5rem (依然很大，保证分行) */
         @media screen and (orientation: portrait) {
-            .type-word {
-                /* 竖屏单词：宽度优先，稍微减小一点防止长词折行太难看 */
-                font-size: 16vw; 
-            }
-            .type-sentence {
-                /* 竖屏句子 */
-                font-size: 7vw;
+            #text-content {
+                font-size: 4.5rem; 
             }
         }
 
@@ -201,14 +189,14 @@
             gap: 15px;
             padding-top: 15px;
             border-top: 1px solid #eee;
-            height: 70px;
+            height: 60px;
         }
 
         .btn {
             border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 600;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
             cursor: pointer;
             height: 100%;
         }
@@ -220,11 +208,11 @@
 </head>
 <body>
 
-    <!-- 横屏提示 (可忽略) -->
+    <!-- 横屏提示 (带忽略按钮) -->
     <div id="orientation-hint">
-        <div style="font-size: 4rem; margin-bottom: 20px;">📱 ⟳</div>
-        <h3>建议横屏使用</h3>
-        <p style="color: #ccc;">横屏模式下字体更大、显示更完整</p>
+        <div style="font-size: 3rem; margin-bottom: 15px;">📱 ⟳</div>
+        <h3>建议横屏</h3>
+        <p style="color: #ddd; font-size: 0.9rem;">横屏字体更大 (8rem)<br>竖屏会自动折行 (4.5rem)</p>
         <button class="ignore-btn" onclick="document.getElementById('orientation-hint').style.display='none'">
             忽略，继续竖屏
         </button>
@@ -232,7 +220,7 @@
 
     <div class="container">
         
-        <!-- 选择页 -->
+        <!-- 选择内容 -->
         <div id="selection-screen">
             <h1>选择内容</h1>
             <div class="unit-list">
@@ -257,20 +245,19 @@
                 <input type="checkbox" id="u7" value="7" checked>
                 <label for="u7" class="unit-item"><strong>拓展内容</strong><span>Stories</span></label>
             </div>
-            <button class="start-btn" onclick="startGame()">开始练习</button>
+            <button class="start-btn" onclick="startGame()">开始练习 (Start)</button>
         </div>
 
-        <!-- 游戏页 -->
+        <!-- 单词显示 -->
         <div id="game-screen">
             <div class="top-info">
-                <span>第 <b id="round-txt" class="info-highlight">1</b> 轮</span>
+                <span>第 <b id="round-txt" style="color:var(--accent-color)">1</b> 轮</span>
                 <span id="unit-txt">Unit 1</span>
-                <span>剩 <b id="left-txt" class="info-highlight">10</b></span>
+                <span>剩余: <b id="left-txt">10</b></span>
             </div>
 
             <div class="card-display" onclick="nextCard()">
-                <!-- 这个元素会根据内容切换 class -->
-                <div id="text-content" class="type-word">Ready</div>
+                <div id="text-content">Ready</div>
             </div>
 
             <div class="bottom-bar">
@@ -319,7 +306,7 @@
         let index = 0;
         let round = 1;
 
-        // 自动隐藏横屏提示
+        // 横屏自动隐藏遮罩
         window.addEventListener("orientationchange", function() {
             if (Math.abs(window.orientation) === 90) {
                  document.getElementById('orientation-hint').style.display='none';
@@ -328,7 +315,7 @@
 
         function startGame() {
             const checks = document.querySelectorAll('input[type="checkbox"]:checked');
-            if (checks.length === 0) { alert("请选择内容"); return; }
+            if (checks.length === 0) { alert("请选择至少一个单元"); return; }
 
             playQueue = [];
             checks.forEach(c => {
@@ -339,7 +326,7 @@
             shuffle(playQueue);
             index = 0;
             round = 1;
-            
+
             document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
             render();
@@ -364,24 +351,14 @@
             const item = playQueue[index];
             const textEl = document.getElementById('text-content');
             
+            // 简单直接赋值，不进行任何字号计算
             textEl.innerText = item.t;
+            
             document.getElementById('unit-txt').innerText = item.u === 7 ? "故事" : "Unit " + item.u;
             document.getElementById('round-txt').innerText = round;
             
             let left = playQueue.length - (index + 1);
             document.getElementById('left-txt').innerText = left < 0 ? 0 : left;
-
-            // --- 核心逻辑：区分单词和句子 ---
-            const len = item.t.length;
-            
-            // 阈值设定为 13 个字符
-            // "Pencil case" (11) -> 单词模式 (极大)
-            // "Nice to meet you" (16) -> 句子模式 (稳重的大号)
-            if (len <= 13) {
-                textEl.className = 'type-word';
-            } else {
-                textEl.className = 'type-sentence';
-            }
         }
 
         function shuffle(arr) {
