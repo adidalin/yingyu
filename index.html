@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小学英语单词 & 句子闪卡 (大字汉化版)</title>
+    <title>小学英语闪卡 (原生字体版)</title>
     <style>
         :root {
-            /* 背景色：极淡的护眼蓝紫色调 */
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --card-bg: #ffffff;
-            --text-main: #000000; /* 纯黑，最高清晰度 */
-            --text-sub: #555555;
-            --accent-color: #4834d4; /* 深蓝紫色，显眼 */
-            --btn-start-bg: #2ecc71; /* 绿色开始按钮 */
-            --btn-next-bg: #3498db; /* 蓝色下一步 */
+            /* 极简配色：去除花哨渐变，使用高对比度颜色 */
+            --bg-color: #f2f2f7;       /* iOS 设置页背景灰 */
+            --card-bg: #ffffff;        /* 纯白卡片 */
+            --text-main: #000000;      /* 纯黑 */
+            --text-sub: #8e8e93;       /* 辅助灰 */
+            --accent-color: #007aff;   /* 系统蓝 */
+            --btn-bg: #007aff;         /* 按钮蓝 */
+            --btn-text: #ffffff;
+            --border-color: #c6c6c8;
         }
 
         body {
             margin: 0;
             padding: 0;
-            /* 字体：优先使用系统黑体，加粗显示 */
-            font-family: "Microsoft YaHei", "SimHei", "PingFang SC", "Heiti SC", sans-serif;
-            background: var(--bg-gradient);
+            /* 核心修改：使用系统默认字体 (system-ui) */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -31,56 +33,57 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ---------------- 强制横屏提示 (手机端修改版) ---------------- */
-        #orientation-lock {
+        /* ---------------- 横屏提示层 ---------------- */
+        #orientation-hint {
             display: none; /* 默认隐藏 */
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); /* 深色背景 */
-            z-index: 9999;
-            color: white;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-        }
-        
-        .rotate-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            animation: rotatePhone 2s infinite ease-in-out;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* 忽略按钮样式 */
+        .hint-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: rotateDevice 2s infinite ease-in-out;
+        }
+
         .ignore-btn {
             margin-top: 30px;
-            padding: 10px 25px;
+            padding: 12px 30px;
             background: transparent;
-            border: 2px solid white;
+            border: 1px solid white;
             color: white;
-            font-size: 1.2rem;
-            border-radius: 30px;
+            font-size: 1rem;
+            border-radius: 8px;
             cursor: pointer;
         }
 
-        @keyframes rotatePhone {
+        @keyframes rotateDevice {
             0% { transform: rotate(0deg); }
             50% { transform: rotate(-90deg); }
             100% { transform: rotate(0deg); }
         }
 
-        /* 仅在竖屏且宽度小于800px（手机）时显示提示，但不隐藏主界面 */
+        /* 仅在竖屏且是手机尺寸时显示提示 */
         @media screen and (orientation: portrait) and (max-width: 800px) {
-            #orientation-lock { display: flex; }
+            #orientation-hint { display: flex; }
         }
 
         /* ---------------- 主容器 ---------------- */
         .container {
             background-color: var(--card-bg);
-            width: 96%;
-            height: 94%;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            width: 95%;
+            height: 95%;
+            border-radius: 12px; /* 更小的圆角，更商务 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             display: flex;
             flex-direction: column;
             padding: 15px;
@@ -88,96 +91,82 @@
             position: relative;
         }
 
-        /* ---------------- 1. 选择界面 (首页) ---------------- */
+        /* ---------------- 1. 首页 (选择界面) ---------------- */
         #selection-screen {
             flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
         }
 
-        /* 首页标题 */
         h1 {
-            margin: 0 0 20px 0;
-            color: var(--text-main);
-            font-size: 2.5rem; /* 放大标题 */
             text-align: center;
-            letter-spacing: 2px;
+            font-size: 1.8rem;
+            margin: 10px 0 20px 0;
+            font-weight: 600;
         }
 
-        /* 单元格布局 */
-        .unit-grid {
-            display: grid;
-            /* 自适应列宽，稍微加宽以容纳大字 */
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            width: 100%;
-            max-width: 1000px;
+        .unit-list {
+            flex: 1;
             overflow-y: auto;
-            max-height: 65vh;
-            padding: 10px;
+            padding: 5px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            align-content: start;
         }
 
-        .unit-label {
-            background: #f1f2f6;
-            border: 3px solid #dfe4ea;
-            border-radius: 15px;
-            padding: 15px; /* 增加内边距 */
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
+        /* 选项卡样式：去除边框，类似系统设置项 */
+        .unit-item {
+            background: #f9f9f9;
+            border: 1px solid #e5e5ea;
+            border-radius: 10px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 80px; /* 保证卡片高度 */
+            align-items: center;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.2s;
         }
 
-        /* 单元名称 (第一行) - 放大 */
-        .unit-label strong {
-            font-size: 1.4rem; 
-            color: #2f3542;
+        .unit-item strong {
             display: block;
-            margin-bottom: 8px;
-        }
-        
-        /* 单元描述 (第二行) - 放大 */
-        .unit-label span {
             font-size: 1.1rem;
-            color: #57606f;
-            font-weight: normal;
+            color: #000;
+            margin-bottom: 5px;
         }
 
+        .unit-item span {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        /* 选中状态：简单的蓝色边框或背景 */
         input[type="checkbox"] { display: none; }
         
-        /* 选中状态 */
-        input[type="checkbox"]:checked + .unit-label {
+        input[type="checkbox"]:checked + .unit-item {
+            background-color: #eef7ff;
             border-color: var(--accent-color);
-            background-color: #e8eaf6; /* 淡蓝紫色背景 */
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
-        input[type="checkbox"]:checked + .unit-label strong {
+        input[type="checkbox"]:checked + .unit-item strong {
             color: var(--accent-color);
         }
 
-        /* 开始按钮 - 放大 */
         .start-btn {
-            margin-top: 25px;
-            background: var(--btn-start-bg);
-            color: white;
+            width: 100%;
+            margin-top: 15px;
+            padding: 16px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            font-size: 1.2rem;
             border: none;
-            padding: 15px 100px; /* 按钮更宽 */
-            font-size: 1.8rem;   /* 按钮文字更大 */
-            border-radius: 60px;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
-            font-weight: bold;
-            font-family: inherit;
-            transition: transform 0.1s;
         }
-        .start-btn:active { transform: scale(0.95); }
+        .start-btn:active { opacity: 0.8; }
 
         /* ---------------- 2. 练习界面 ---------------- */
         #game-screen {
@@ -186,183 +175,166 @@
             height: 100%;
         }
 
-        /* 顶部信息栏 */
-        .top-bar {
+        /* 顶部状态栏：极简文字 */
+        .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px 10px;
-            font-size: 1.2rem;
-            color: #555;
-            font-weight: bold;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: var(--text-sub);
         }
-        
-        /* 胶囊样式 */
-        .badge {
-            background: #dfe4ea;
-            padding: 8px 20px;
-            border-radius: 30px;
-        }
-        .badge-unit { color: var(--accent-color); background: #dcdde1; }
 
-        /* 文字展示区 */
-        .content-area {
+        .status-highlight {
+            color: var(--accent-color);
+            font-weight: 600;
+            background: #eef7ff;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        /* 单词显示区 */
+        .card-area {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
             cursor: pointer;
-            position: relative;
-            padding: 0 20px;
-            box-sizing: border-box;
+            /* 防止长单词溢出 */
+            overflow: hidden; 
         }
 
-        #display-text {
-            font-weight: 900; /* 最粗字体 */
-            color: black;
+        #word-display {
+            font-weight: 600; /* 适度加粗，不要太夸张 */
             text-align: center;
-            line-height: 1.1;
+            line-height: 1.2;
             word-wrap: break-word;
-            max-width: 100%;
+            width: 100%;
         }
 
-        /* 底部按钮栏 */
-        .bottom-controls {
+        /* 底部操作栏 */
+        .control-bar {
             display: flex;
-            justify-content: space-between;
-            gap: 20px;
+            gap: 15px;
+            margin-top: 10px;
             padding-top: 10px;
-            border-top: 2px solid #f1f2f6;
-            height: 70px;
+            border-top: 1px solid #f0f0f0;
         }
 
         .btn {
+            padding: 15px 0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
             border: none;
-            border-radius: 15px;
-            font-size: 1.4rem;
-            font-weight: bold;
             cursor: pointer;
-            font-family: inherit;
-            transition: opacity 0.2s;
+            font-family: inherit; /* 继承系统字体 */
         }
 
-        .btn-back {
-            background: #dcdde1;
-            color: #2f3542;
-            width: 120px;
+        .btn-exit {
+            background-color: #e5e5ea;
+            color: #000;
+            width: 30%;
         }
 
         .btn-next {
-            background: var(--btn-next-bg);
+            background-color: var(--btn-bg);
             color: white;
-            flex: 1;
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            width: 70%;
         }
 
-        .btn:active { opacity: 0.8; }
-
-        /* 弹入动画 */
-        .pop-effect { animation: popIn 0.2s ease-out; }
-        @keyframes popIn { 
-            0% { transform: scale(0.85); opacity: 0.2; } 
-            100% { transform: scale(1); opacity: 1; } 
-        }
+        .btn:active { opacity: 0.7; }
 
     </style>
 </head>
 <body>
 
-    <!-- 手机竖屏提示 (带关闭按钮) -->
-    <div id="orientation-lock">
-        <div class="rotate-icon">📱</div>
-        <h2 style="font-size: 2rem;">建议把手机横过来<br>字体会更大哦</h2>
-        <button class="ignore-btn" onclick="document.getElementById('orientation-lock').style.display='none'">
-            忽略，继续使用
+    <!-- 横屏提示 (带忽略按钮) -->
+    <div id="orientation-hint">
+        <div class="hint-icon">📱 ⟳</div>
+        <h3>建议横屏使用</h3>
+        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 20px;">横屏模式下字体更大，体验更好</p>
+        <button class="ignore-btn" onclick="document.getElementById('orientation-hint').style.display='none'">
+            忽略，继续竖屏使用
         </button>
     </div>
 
     <div class="container">
         
-        <!-- 1. 选择界面 -->
+        <!-- 选择页 -->
         <div id="selection-screen">
-            <h1>英语闪卡练习</h1>
-            <div class="unit-grid">
-                <!-- Unit 1 -->
-                <input type="checkbox" id="u1" class="unit-box" value="1" checked>
-                <label for="u1" class="unit-label">
+            <h1>选择单元</h1>
+            <div class="unit-list">
+                <input type="checkbox" id="u1" value="1" checked>
+                <label for="u1" class="unit-item">
                     <strong>Unit 1 第一单元</strong>
-                    <span>问候 / 句子</span>
+                    <span>Greetings 问候</span>
                 </label>
 
-                <!-- Unit 2 -->
-                <input type="checkbox" id="u2" class="unit-box" value="2" checked>
-                <label for="u2" class="unit-label">
+                <input type="checkbox" id="u2" value="2" checked>
+                <label for="u2" class="unit-item">
                     <strong>Unit 2 第二单元</strong>
-                    <span>数字 / 句子</span>
+                    <span>Numbers 数字</span>
                 </label>
 
-                <!-- Unit 3 -->
-                <input type="checkbox" id="u3" class="unit-box" value="3" checked>
-                <label for="u3" class="unit-label">
+                <input type="checkbox" id="u3" value="3" checked>
+                <label for="u3" class="unit-item">
                     <strong>Unit 3 第三单元</strong>
-                    <span>家庭 / 句子</span>
+                    <span>Family 家庭</span>
                 </label>
 
-                <!-- Unit 4 -->
-                <input type="checkbox" id="u4" class="unit-box" value="4" checked>
-                <label for="u4" class="unit-label">
+                <input type="checkbox" id="u4" value="4" checked>
+                <label for="u4" class="unit-item">
                     <strong>Unit 4 第四单元</strong>
-                    <span>教室 / 句子</span>
+                    <span>Classroom 教室</span>
                 </label>
 
-                <!-- Unit 5 -->
-                <input type="checkbox" id="u5" class="unit-box" value="5" checked>
-                <label for="u5" class="unit-label">
+                <input type="checkbox" id="u5" value="5" checked>
+                <label for="u5" class="unit-item">
                     <strong>Unit 5 第五单元</strong>
-                    <span>书包 / 句子</span>
+                    <span>Schoolbag 书包</span>
                 </label>
 
-                <!-- Unit 6 -->
-                <input type="checkbox" id="u6" class="unit-box" value="6" checked>
-                <label for="u6" class="unit-label">
+                <input type="checkbox" id="u6" value="6" checked>
+                <label for="u6" class="unit-item">
                     <strong>Unit 6 第六单元</strong>
-                    <span>颜色 / 句子</span>
+                    <span>Colours 颜色</span>
                 </label>
 
-                <!-- Unit 7 -->
-                <input type="checkbox" id="u7" class="unit-box" value="7" checked>
-                <label for="u7" class="unit-label">
-                    <strong>故事与拓展</strong>
-                    <span>长句 / 故事</span>
+                <input type="checkbox" id="u7" value="7" checked>
+                <label for="u7" class="unit-item">
+                    <strong>拓展内容</strong>
+                    <span>Stories 故事/长句</span>
                 </label>
             </div>
-            <button class="start-btn" onclick="startGame()">开始练习</button>
+            <button class="start-btn" onclick="startGame()">开始练习 (Start)</button>
         </div>
 
-        <!-- 2. 游戏界面 -->
+        <!-- 练习页 -->
         <div id="game-screen">
-            <div class="top-bar">
-                <div class="badge" id="round-display">第 1 轮</div>
-                <div class="badge badge-unit" id="unit-display">Unit 1</div>
-                <div class="badge" id="left-display">剩: 10</div>
+            <div class="status-bar">
+                <span>第 <b id="round-num">1</b> 轮</span>
+                <span class="status-highlight" id="unit-name">Unit 1</span>
+                <span>剩余: <b id="left-num">10</b></span>
             </div>
 
-            <div class="content-area" onclick="nextContent()">
-                <div id="display-text">Ready</div>
+            <div class="card-area" onclick="nextCard()">
+                <div id="word-display">Ready</div>
             </div>
 
-            <div class="bottom-controls">
-                <button class="btn btn-back" onclick="goBack()">退出</button>
-                <button class="btn btn-next" onclick="nextContent()">下一个 (Next)</button>
+            <div class="control-bar">
+                <button class="btn btn-exit" onclick="exitGame()">退出</button>
+                <button class="btn btn-next" onclick="nextCard()">下一个</button>
             </div>
         </div>
 
     </div>
 
     <script>
-        // 数据源：包含单词和句子
-        const contentData = {
+        const data = {
             1: [
                 "hello", "nice", "meet", "you", "let's", "play", "I", "am", "I'm", "too", "Miss", "photo", "how", "say",
                 "Nice to meet you.", "Let's play.", "I'm Miss Li.", "How do you say “hello”."
@@ -396,106 +368,85 @@
             ]
         };
 
-        let queue = [];
-        let currentIndex = 0;
-        let roundCount = 1;
+        let playList = [];
+        let index = 0;
+        let round = 1;
 
-        // 键盘控制
-        document.addEventListener('keydown', (e) => {
-            if (document.getElementById('game-screen').style.display === 'flex') {
-                if (['Space', 'Enter', 'ArrowRight'].includes(e.code)) {
-                    e.preventDefault();
-                    nextContent();
-                }
-            }
-        });
-
-        // 监听屏幕旋转事件，如果用户旋转了手机，自动隐藏遮罩层
+        // 自动隐藏横屏提示
         window.addEventListener("orientationchange", function() {
             if (Math.abs(window.orientation) === 90) {
-                 // 横屏了
-                 document.getElementById('orientation-lock').style.display='none';
+                 document.getElementById('orientation-hint').style.display='none';
             }
         });
 
         function startGame() {
-            const boxes = document.querySelectorAll('.unit-box:checked');
-            if (boxes.length === 0) { alert("请至少选择一个单元！"); return; }
+            const checks = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checks.length === 0) { alert("请选择至少一个单元"); return; }
 
-            queue = [];
-            boxes.forEach(box => {
-                const u = parseInt(box.value);
-                contentData[u].forEach(text => {
-                    queue.push({ text: text, unit: u });
-                });
+            playList = [];
+            checks.forEach(c => {
+                const u = parseInt(c.value);
+                data[u].forEach(t => playList.push({t: t, u: u}));
             });
 
-            shuffle(queue);
-            currentIndex = 0;
-            roundCount = 1;
-            
+            shuffle(playList);
+            index = 0;
+            round = 1;
+
             document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
-            updateDisplay();
+            render();
         }
 
-        function goBack() {
+        function exitGame() {
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('selection-screen').style.display = 'flex';
         }
 
-        function nextContent() {
-            currentIndex++;
-            if (currentIndex >= queue.length) {
-                roundCount++;
-                currentIndex = 0;
-                shuffle(queue); 
+        function nextCard() {
+            index++;
+            if (index >= playList.length) {
+                round++;
+                index = 0;
+                shuffle(playList);
             }
-            updateDisplay();
+            render();
         }
 
-        function updateDisplay() {
-            const item = queue[currentIndex];
-            const textEl = document.getElementById('display-text');
+        function render() {
+            const item = playList[index];
+            const textEl = document.getElementById('word-display');
             
-            textEl.innerText = item.text;
+            textEl.innerText = item.t;
+            document.getElementById('unit-name').innerText = item.u === 7 ? "故事" : "Unit " + item.u;
+            document.getElementById('round-num').innerText = round;
             
-            // 更新顶部状态
-            const unitText = item.unit === 7 ? "故事/拓展" : "Unit " + item.unit;
-            document.getElementById('unit-display').innerText = unitText;
-            document.getElementById('round-display').innerText = "第 " + roundCount + " 轮";
-            
-            let remaining = queue.length - (currentIndex + 1);
-            if(remaining < 0) remaining = 0;
-            document.getElementById('left-display').innerText = "剩: " + remaining;
+            let left = playList.length - (index + 1);
+            if (left < 0) left = 0;
+            document.getElementById('left-num').innerText = left;
 
-            // --- 智能字体大小逻辑 (针对大屏和手机) ---
-            const len = item.text.length;
+            // 字体适配逻辑
+            const len = item.t.length;
             const isLandscape = window.innerWidth > window.innerHeight;
-            let fontSize;
+            let size = 3; // 默认 rem
 
             if (isLandscape) {
-                // 横屏模式 (电脑或横屏手机)
-                if (len <= 2) fontSize = 18;      // I, No -> 极大
-                else if (len <= 5) fontSize = 14; // Apple -> 超大
-                else if (len <= 10) fontSize = 10; // Classroom -> 很大
-                else if (len <= 20) fontSize = 7; // 短句 -> 大
-                else if (len <= 35) fontSize = 5; // 中句 -> 中
-                else fontSize = 3.5;              // 长句 -> 适中
+                // 横屏字体策略
+                if (len <= 2) size = 16;
+                else if (len <= 5) size = 12;
+                else if (len <= 10) size = 8;
+                else if (len <= 20) size = 5;
+                else if (len <= 35) size = 4;
+                else size = 3;
             } else {
-                // 竖屏模式 (如果用户点击了忽略，则使用这套逻辑)
-                if (len <= 3) fontSize = 9;
-                else if (len <= 8) fontSize = 6;
-                else if (len <= 20) fontSize = 3.5;
-                else fontSize = 2.5;
+                // 竖屏字体策略 (即使竖屏也尽量大)
+                if (len <= 3) size = 9;
+                else if (len <= 8) size = 6;
+                else if (len <= 20) size = 3.5;
+                else size = 2.5;
             }
 
-            textEl.style.fontSize = fontSize + "rem";
-            
-            // 动画重置
-            textEl.classList.remove('pop-effect');
-            void textEl.offsetWidth; 
-            textEl.classList.add('pop-effect');
+            textEl.style.fontSize = size + "rem";
         }
 
         function shuffle(arr) {
