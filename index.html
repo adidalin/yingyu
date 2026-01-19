@@ -1,31 +1,15 @@
-function render() {
-    const content = this.content;
+function render(text) {
+    // Set font sizes for words and sentences
+    const wordFontSize = '16px'; // Fixed font size for words
+    const sentenceFontSize = '18px'; // Fixed font size for sentences
 
-    // Define fixed font sizes
-    const wordFontSize = '14px'; // Fixed size for words
-    const sentenceFontSize = '16px'; // Fixed size for sentences
+    const words = text.split(' ');
+    const renderedWords = words.map(word => `<span style='font-size: ${wordFontSize};'>${word}</span>`);
+    const renderedText = renderedWords.join(' ');
 
-    // Clear previous content
-    this.container.innerHTML = '';
+    // Wrap sentences in a <p> tag or another method for larger font
+    const sentences = renderedText.split('. ');
+    const renderedSentences = sentences.map(sentence => `<p style='font-size: ${sentenceFontSize};'>${sentence}</p>`);
 
-    // Create elements for rendering
-    const elements = content.split(/(?<=\.|!|\?)\s+/).map(sentence => {
-        const sentenceElement = document.createElement('div');
-        sentenceElement.style.fontSize = sentenceFontSize;
-        sentenceElement.textContent = sentence;
-
-        // Split sentence into words
-        const words = sentence.split(' ');
-        words.forEach(word => {
-            const wordElement = document.createElement('span');
-            wordElement.style.fontSize = wordFontSize;
-            wordElement.textContent = word + ' ';
-            sentenceElement.appendChild(wordElement);
-        });
-
-        return sentenceElement;
-    });
-
-    // Append new content to container
-    elements.forEach(element => this.container.appendChild(element));
+    return renderedSentences.join('');
 }
