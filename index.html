@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小学英语单词 & 句子闪卡 (大字版)</title>
+    <title>小学英语单词 & 句子闪卡 (大字汉化版)</title>
     <style>
         :root {
             /* 背景色：极淡的护眼蓝紫色调 */
@@ -31,12 +31,12 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ---------------- 强制横屏提示 (手机端) ---------------- */
+        /* ---------------- 强制横屏提示 (手机端修改版) ---------------- */
         #orientation-lock {
-            display: none;
+            display: none; /* 默认隐藏 */
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.92); /* 深色背景 */
             z-index: 9999;
             color: white;
             flex-direction: column;
@@ -51,15 +51,27 @@
             animation: rotatePhone 2s infinite ease-in-out;
         }
 
+        /* 忽略按钮样式 */
+        .ignore-btn {
+            margin-top: 30px;
+            padding: 10px 25px;
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
         @keyframes rotatePhone {
             0% { transform: rotate(0deg); }
             50% { transform: rotate(-90deg); }
             100% { transform: rotate(0deg); }
         }
 
+        /* 仅在竖屏且宽度小于800px（手机）时显示提示，但不隐藏主界面 */
         @media screen and (orientation: portrait) and (max-width: 800px) {
             #orientation-lock { display: flex; }
-            .container { display: none !important; }
         }
 
         /* ---------------- 主容器 ---------------- */
@@ -261,10 +273,13 @@
 </head>
 <body>
 
-    <!-- 手机竖屏提示 -->
+    <!-- 手机竖屏提示 (带关闭按钮) -->
     <div id="orientation-lock">
         <div class="rotate-icon">📱</div>
-        <h2 style="font-size: 2rem;">请把手机横过来<br>获得最大字体</h2>
+        <h2 style="font-size: 2rem;">建议把手机横过来<br>字体会更大哦</h2>
+        <button class="ignore-btn" onclick="document.getElementById('orientation-lock').style.display='none'">
+            忽略，继续使用
+        </button>
     </div>
 
     <div class="container">
@@ -395,6 +410,14 @@
             }
         });
 
+        // 监听屏幕旋转事件，如果用户旋转了手机，自动隐藏遮罩层
+        window.addEventListener("orientationchange", function() {
+            if (Math.abs(window.orientation) === 90) {
+                 // 横屏了
+                 document.getElementById('orientation-lock').style.display='none';
+            }
+        });
+
         function startGame() {
             const boxes = document.querySelectorAll('.unit-box:checked');
             if (boxes.length === 0) { alert("请至少选择一个单元！"); return; }
@@ -460,7 +483,7 @@
                 else if (len <= 35) fontSize = 5; // 中句 -> 中
                 else fontSize = 3.5;              // 长句 -> 适中
             } else {
-                // 竖屏模式 (尽管有提示，还是做个保底)
+                // 竖屏模式 (如果用户点击了忽略，则使用这套逻辑)
                 if (len <= 3) fontSize = 9;
                 else if (len <= 8) fontSize = 6;
                 else if (len <= 20) fontSize = 3.5;
