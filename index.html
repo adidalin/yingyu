@@ -1,35 +1,395 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>小学英语闪卡 (稳定大字版)</title>
     <style>
+        :root {
+            /* 极简系统配色 */
+            --bg-color: #f2f2f7;
+            --card-bg: #ffffff;
+            --text-color: #000000;
+            --accent-color: #007aff; 
+            --gray-text: #8e8e93;
+        }
+
         body {
-            font-size: 8rem;  /* Fixed font size for words */
+            margin: 0;
+            padding: 0;
+            /* 原生系统字体，干净清晰 */
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        .sentence {
-            font-size: 5rem;  /* Fixed font size for sentences */
+
+        /* ---------------- 横屏建议提示 (可忽略) ---------------- */
+        #orientation-hint {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
         }
+
+        /* 仅在竖屏手机下显示 */
+        @media screen and (orientation: portrait) and (max-width: 800px) {
+            #orientation-hint { display: flex; }
+        }
+
+        .ignore-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            border: 1px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            font-size: 1rem;
+        }
+
+        /* ---------------- 主容器 ---------------- */
+        .container {
+            background-color: var(--card-bg);
+            width: 96%;
+            height: 96%;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        /* ---------------- 1. 选卡界面 ---------------- */
+        #selection-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1.6rem;
+            color: var(--text-color);
+        }
+
+        .unit-list {
+            flex: 1;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            padding: 5px;
+            align-content: start;
+        }
+
+        .unit-item {
+            background: #f5f5f7;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .unit-item strong { display: block; font-size: 1.1rem; color: #333; }
+        .unit-item span { font-size: 0.9rem; color: var(--gray-text); margin-top: 4px; display: block; }
+
+        input[type="checkbox"] { display: none; }
+        input[type="checkbox"]:checked + .unit-item {
+            background-color: #eaf2ff;
+            border-color: var(--accent-color);
+        }
+        input[type="checkbox"]:checked + .unit-item strong { color: var(--accent-color); }
+
+        .start-btn {
+            margin-top: 15px;
+            padding: 18px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* ---------------- 2. 练习界面 (核心修改) ---------------- */
+        #game-screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .top-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray-text);
+            font-size: 1rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-highlight { color: var(--accent-color); font-weight: bold; }
+
+        /* 内容显示区：绝对居中 */
+        .card-display {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden; /* 防止溢出 */
+            padding: 0 10px; /* 左右留一点边距 */
+            box-sizing: border-box;
+        }
+
+        #text-content {
+            font-weight: bold;
+            line-height: 1.1;
+            color: black;
+            width: 100%;
+            /* 关键：允许长单词换行，防止撑破屏幕 */
+            word-wrap: break-word; 
+        }
+
+        /* --- 核心字体策略：两套固定的大字体 --- */
+        
+        /* 策略 A: 单词模式 (Word Mode) - 极大 */
+        .type-word {
+            /* 横屏时：使用视口宽度的 16% 或 视口高度的 35%，取最小值以防溢出 */
+            font-size: min(16vw, 35vh); 
+        }
+        
+        /* 策略 B: 句子模式 (Sentence Mode) - 很大，但适合多行 */
+        .type-sentence {
+            /* 横屏时：使用视口宽度的 6% 或 视口高度的 12% */
+            font-size: min(6vw, 12vh);
+        }
+
+        /* 针对竖屏的单独调整 (虽然建议横屏，但必须适配) */
+        @media screen and (orientation: portrait) {
+            .type-word {
+                /* 竖屏单词：宽度优先，稍微减小一点防止长词折行太难看 */
+                font-size: 16vw; 
+            }
+            .type-sentence {
+                /* 竖屏句子 */
+                font-size: 7vw;
+            }
+        }
+
+        /* 底部按钮 */
+        .bottom-bar {
+            display: flex;
+            gap: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            height: 70px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            height: 100%;
+        }
+        .btn-exit { width: 30%; background: #f0f0f5; color: #333; }
+        .btn-next { width: 70%; background: var(--accent-color); color: white; }
+        .btn:active { opacity: 0.8; }
+
     </style>
 </head>
 <body>
+
+    <!-- 横屏提示 (可忽略) -->
+    <div id="orientation-hint">
+        <div style="font-size: 4rem; margin-bottom: 20px;">📱 ⟳</div>
+        <h3>建议横屏使用</h3>
+        <p style="color: #ccc;">横屏模式下字体更大、显示更完整</p>
+        <button class="ignore-btn" onclick="document.getElementById('orientation-hint').style.display='none'">
+            忽略，继续竖屏
+        </button>
+    </div>
+
+    <div class="container">
+        
+        <!-- 选择页 -->
+        <div id="selection-screen">
+            <h1>选择内容</h1>
+            <div class="unit-list">
+                <input type="checkbox" id="u1" value="1" checked>
+                <label for="u1" class="unit-item"><strong>Unit 1 第一单元</strong><span>Greetings</span></label>
+
+                <input type="checkbox" id="u2" value="2" checked>
+                <label for="u2" class="unit-item"><strong>Unit 2 第二单元</strong><span>Numbers</span></label>
+
+                <input type="checkbox" id="u3" value="3" checked>
+                <label for="u3" class="unit-item"><strong>Unit 3 第三单元</strong><span>Family</span></label>
+
+                <input type="checkbox" id="u4" value="4" checked>
+                <label for="u4" class="unit-item"><strong>Unit 4 第四单元</strong><span>Classroom</span></label>
+
+                <input type="checkbox" id="u5" value="5" checked>
+                <label for="u5" class="unit-item"><strong>Unit 5 第五单元</strong><span>Schoolbag</span></label>
+
+                <input type="checkbox" id="u6" value="6" checked>
+                <label for="u6" class="unit-item"><strong>Unit 6 第六单元</strong><span>Colours</span></label>
+
+                <input type="checkbox" id="u7" value="7" checked>
+                <label for="u7" class="unit-item"><strong>拓展内容</strong><span>Stories</span></label>
+            </div>
+            <button class="start-btn" onclick="startGame()">开始练习</button>
+        </div>
+
+        <!-- 游戏页 -->
+        <div id="game-screen">
+            <div class="top-info">
+                <span>第 <b id="round-txt" class="info-highlight">1</b> 轮</span>
+                <span id="unit-txt">Unit 1</span>
+                <span>剩 <b id="left-txt" class="info-highlight">10</b></span>
+            </div>
+
+            <div class="card-display" onclick="nextCard()">
+                <!-- 这个元素会根据内容切换 class -->
+                <div id="text-content" class="type-word">Ready</div>
+            </div>
+
+            <div class="bottom-bar">
+                <button class="btn btn-exit" onclick="exitGame()">退出</button>
+                <button class="btn btn-next" onclick="nextCard()">下一个</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Improved render function
-        function render(text) {
-            const words = text.split(' ');
-            const sentences = text.split('. ');
+        const data = {
+            1: [
+                "hello", "nice", "meet", "you", "let's", "play", "I", "am", "I'm", "too", "Miss", "photo", "how", "say",
+                "Nice to meet you.", "Let's play.", "I'm Miss Li.", "How do you say “hello”."
+            ],
+            2: [
+                "number", "one", "two", "three", "four", "five", "six", "seven", "balloon", "thank", "please", "Numbers",
+                "Four balloons.", "Six balloons.", "Two balloons.", "One balloon.", "Thank you.", "Please say the number."
+            ],
+            3: [
+                "family", "my", "mum", "dad", "grandpa", "grandma", "sister", "and", "brother", "this", "is", "love", "me", "tree",
+                "Meet my family.", "My sister and brother.", "This is my grandma.", "I love my grandma.", "This is Toby's mum.", "I love my family.", "This is Toby's sister, May."
+            ],
+            4: [
+                "classroom", "what", "open", "door", "blackboard", "window", "desk", "chair", "it", "big", "that", "teacher", "Good job!", "a(n)", "very", "old", "school", "look",
+                "What's this?", "Open the door.", "This is my chair.", "This is the blackboard.", "That is my teacher.", "Good job, May!", "This is my classroom."
+            ],
+            5: [
+                "schoolbag", "pencil case", "pencil", "book", "bye", "goodbye", "no", "here you are", "read", "together", "School things",
+                "Open my schoolbag.", "That’s Toby's book and pencil case.", "Let's read together.", "Here you are.", "Goodbye, dad!", "Look, this is my pencil case."
+            ],
+            6: [
+                "colour", "red", "green", "blue", "black", "white", "yellow", "so", "many", "happy", "Chinese New Year", "stop", "go", "slow",
+                "What colour?", "Black white and yellow.", "Red green and blue.", "So many colors.", "Blue green red and yellow, Four colors.", "It’s green red and yellow.", "Happy Chinese New Year", "It's red, stop!", "It's green, go!", "It's yellow, slow!"
+            ],
+            7: [
+                "This is a very old school.", "That is an old school.", "Three books.", 
+                "That is an apple tree.", "This apple is very big.", "This is my apple.", "One apple now.", 
+                "The moon is in the water.", "Come and help.", "That is the moon.", "It’s still in the sky.", 
+                "Six people in my family.", "Friendly Shandong welcomes you!", 
+                "My brother is six, I love my brother.", "This is Mount Taishan."
+            ]
+        };
 
-            words.forEach(word => {
-                const span = document.createElement('span');
-                span.textContent = word;
-                document.body.appendChild(span);
+        let playQueue = [];
+        let index = 0;
+        let round = 1;
+
+        // 自动隐藏横屏提示
+        window.addEventListener("orientationchange", function() {
+            if (Math.abs(window.orientation) === 90) {
+                 document.getElementById('orientation-hint').style.display='none';
+            }
+        });
+
+        function startGame() {
+            const checks = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checks.length === 0) { alert("请选择内容"); return; }
+
+            playQueue = [];
+            checks.forEach(c => {
+                const u = parseInt(c.value);
+                data[u].forEach(txt => playQueue.push({t: txt, u: u}));
             });
 
-            sentences.forEach(sentence => {
-                const p = document.createElement('p');
-                p.className = 'sentence';
-                p.textContent = sentence;
-                document.body.appendChild(p);
-            });
+            shuffle(playQueue);
+            index = 0;
+            round = 1;
+            
+            document.getElementById('selection-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+            render();
+        }
+
+        function exitGame() {
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('selection-screen').style.display = 'flex';
+        }
+
+        function nextCard() {
+            index++;
+            if (index >= playQueue.length) {
+                round++;
+                index = 0;
+                shuffle(playQueue);
+            }
+            render();
+        }
+
+        function render() {
+            const item = playQueue[index];
+            const textEl = document.getElementById('text-content');
+            
+            textEl.innerText = item.t;
+            document.getElementById('unit-txt').innerText = item.u === 7 ? "故事" : "Unit " + item.u;
+            document.getElementById('round-txt').innerText = round;
+            
+            let left = playQueue.length - (index + 1);
+            document.getElementById('left-txt').innerText = left < 0 ? 0 : left;
+
+            // --- 核心逻辑：区分单词和句子 ---
+            const len = item.t.length;
+            
+            // 阈值设定为 13 个字符
+            // "Pencil case" (11) -> 单词模式 (极大)
+            // "Nice to meet you" (16) -> 句子模式 (稳重的大号)
+            if (len <= 13) {
+                textEl.className = 'type-word';
+            } else {
+                textEl.className = 'type-sentence';
+            }
+        }
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
         }
     </script>
-    <h1>Welcome to the Improved Render Function!</h1>
 </body>
 </html>
