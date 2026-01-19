@@ -1,15 +1,35 @@
-function render(text) {
-    // Set font sizes for words and sentences
-    const wordFontSize = '16px'; // Fixed font size for words
-    const sentenceFontSize = '18px'; // Fixed font size for sentences
+<html>
+<head>
+    <style>
+        body {
+            font-size: 8rem;  /* Fixed font size for words */
+        }
+        .sentence {
+            font-size: 5rem;  /* Fixed font size for sentences */
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Improved render function
+        function render(text) {
+            const words = text.split(' ');
+            const sentences = text.split('. ');
 
-    const words = text.split(' ');
-    const renderedWords = words.map(word => `<span style='font-size: ${wordFontSize};'>${word}</span>`);
-    const renderedText = renderedWords.join(' ');
+            words.forEach(word => {
+                const span = document.createElement('span');
+                span.textContent = word;
+                document.body.appendChild(span);
+            });
 
-    // Wrap sentences in a <p> tag or another method for larger font
-    const sentences = renderedText.split('. ');
-    const renderedSentences = sentences.map(sentence => `<p style='font-size: ${sentenceFontSize};'>${sentence}</p>`);
-
-    return renderedSentences.join('');
-}
+            sentences.forEach(sentence => {
+                const p = document.createElement('p');
+                p.className = 'sentence';
+                p.textContent = sentence;
+                document.body.appendChild(p);
+            });
+        }
+    </script>
+    <h1>Welcome to the Improved Render Function!</h1>
+</body>
+</html>
