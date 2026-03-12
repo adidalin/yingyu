@@ -6,20 +6,21 @@
     <title>小学英语闪卡 (高新区凤凰学校1年级专用)</title>
     <style>
         :root {
-            /* 极简配色 */
-            --bg-color: #f2f2f7;
+            /* 现代清新配色 */
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             --card-bg: #ffffff;
-            --text-color: #000000;
+            --text-color: #2c3e50;
             --accent-color: #007aff; 
+            --accent-hover: #005bb5;
             --gray-text: #8e8e93;
+            --border-color: #e5e5ea;
         }
 
         body {
             margin: 0;
             padding: 0;
-            /* 原生系统字体，无衬线 */
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -29,12 +30,13 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ---------------- 横屏建议提示 (可忽略) ---------------- */
+        /* ---------------- 横屏建议提示 ---------------- */
         #orientation-hint {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
             z-index: 9999;
             flex-direction: column;
             align-items: center;
@@ -49,13 +51,18 @@
 
         .ignore-btn {
             margin-top: 25px;
-            padding: 10px 30px;
-            border: 1px solid white;
+            padding: 12px 35px;
+            border: 2px solid rgba(255,255,255,0.6);
             background: transparent;
             color: white;
-            border-radius: 8px;
+            border-radius: 25px;
             font-size: 1rem;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+        .ignore-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: white;
         }
 
         /* ---------------- 主容器 ---------------- */
@@ -63,12 +70,12 @@
             background-color: var(--card-bg);
             width: 96%;
             height: 96%;
-            border-radius: 12px;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
-            padding: 15px;
+            padding: 20px;
             box-sizing: border-box;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
 
         /* ---------------- 1. 选卡界面 ---------------- */
@@ -81,54 +88,83 @@
 
         h1 {
             text-align: center;
-            margin: 10px 0;
-            font-size: 1.5rem;
+            margin: 10px 0 20px 0;
+            font-size: 1.8rem;
             color: var(--text-color);
+            letter-spacing: 1px;
         }
 
         .unit-list {
             flex: 1;
             overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            padding: 5px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            padding: 5px 10px 20px 5px;
             align-content: start;
         }
 
+        /* 美化后的选项卡片 */
         .unit-item {
-            background: #f5f5f7;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            padding: 15px;
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px 10px;
             text-align: center;
             cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
-        .unit-item strong { display: block; font-size: 1.1rem; color: #333; margin-bottom: 5px; }
+        .unit-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+            border-color: #d1d1d6;
+        }
+
+        .unit-item strong { display: block; font-size: 1.1rem; color: #333; margin-bottom: 6px; }
         .unit-item span { font-size: 0.9rem; color: var(--gray-text); }
 
         input[type="checkbox"] { display: none; }
         input[type="checkbox"]:checked + .unit-item {
-            background-color: #eaf2ff;
+            background-color: #f0f7ff;
             border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
         }
         input[type="checkbox"]:checked + .unit-item strong { color: var(--accent-color); }
+        
+        /* 选中状态的小对号 */
+        input[type="checkbox"]:checked + .unit-item::after {
+            content: "✓";
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            color: var(--accent-color);
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
 
+        /* 美化后的开始按钮 */
         .start-btn {
             margin-top: 15px;
-            padding: 15px;
-            background-color: var(--accent-color);
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
+            border-radius: 14px;
+            font-size: 1.3rem;
             font-weight: bold;
             width: 100%;
             cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .start-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(0, 122, 255, 0.2);
         }
 
-        /* ---------------- 2. 练习界面 (核心修改) ---------------- */
+        /* ---------------- 2. 练习界面 ---------------- */
         #game-screen {
             display: none;
             flex-direction: column;
@@ -138,121 +174,183 @@
         .top-info {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             color: var(--gray-text);
-            font-size: 0.9rem;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            font-size: 1rem;
+            padding: 5px 10px 15px 10px;
+            border-bottom: 2px dashed #eee;
         }
+        .top-info b { color: var(--text-color); }
+        .top-info #round-txt { color: var(--accent-color); font-size: 1.2rem; }
 
         /* 文字显示区域 */
         .card-display {
             flex: 1;
             display: flex;
             justify-content: center; 
-            align-items: center;     /* 垂直居中 */
+            align-items: center;
             width: 100%;
             cursor: pointer;
-            overflow-y: auto;        /* 如果句子分行太多超出屏幕，允许滚动 */
-            padding: 10px;
+            overflow-y: auto;
+            padding: 20px;
             box-sizing: border-box;
+            background: #fafafa;
+            margin: 15px 0;
+            border-radius: 16px;
+            border: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        .card-display:active {
+            background: #f2f2f7;
         }
 
         #text-content {
-            /* 核心修改：统一的超大字体 */
             font-weight: 700;
-            color: #000;
+            color: #1c1c1e;
             text-align: center;
-            line-height: 1.15;       /* 行高稍微紧凑一点 */
-            
-            /* 强制单词内不断行，但句子会在空格处自动换行 */
+            line-height: 1.2;
             word-wrap: break-word;   
             overflow-wrap: break-word;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
 
-        /* --- 字体大小设置 --- */
-
-        /* 默认（横屏/电脑）: 8rem (非常大) */
-        #text-content {
-            font-size: 8rem; 
-        }
-
-        /* 竖屏手机适配: 4.5rem (依然很大，保证分行) */
+        /* 字体大小设置 */
+        #text-content { font-size: 8rem; }
         @media screen and (orientation: portrait) {
-            #text-content {
-                font-size: 4.5rem; 
-            }
+            #text-content { font-size: 4.5rem; }
         }
 
         /* 底部按钮 */
         .bottom-bar {
             display: flex;
             gap: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-            height: 60px;
+            height: 65px;
         }
 
         .btn {
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 500;
+            border-radius: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
             cursor: pointer;
             height: 100%;
+            transition: all 0.2s;
         }
-        .btn-exit { width: 30%; background: #f0f0f5; color: #333; }
-        .btn-next { width: 70%; background: var(--accent-color); color: white; }
-        .btn:active { opacity: 0.8; }
+        .btn-exit { 
+            width: 30%; 
+            background: #f2f2f7; 
+            color: #48484a; 
+        }
+        .btn-exit:hover { background: #e5e5ea; }
+        
+        .btn-next { 
+            width: 70%; 
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-hover)); 
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.25);
+        }
+        .btn-next:active { 
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+        }
+
+        /* ---------------- 3. Toast 提示框 ---------------- */
+        #toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 20px 40px;
+            border-radius: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            pointer-events: none;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        #toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
 
     </style>
 </head>
 <body>
 
-    <!-- 横屏提示 (带忽略按钮) -->
+    <!-- 横屏提示 -->
     <div id="orientation-hint">
-        <div style="font-size: 3rem; margin-bottom: 15px;">📱 ⟳</div>
-        <h3>建议横屏</h3>
-        <p style="color: #ddd; font-size: 0.9rem;">横屏字体更大 (8rem)<br>竖屏会自动折行 (4.5rem)</p>
+        <div style="font-size: 4rem; margin-bottom: 20px;">📱 ⟳</div>
+        <h2>建议横屏使用</h2>
+        <p style="color: #ddd; font-size: 1rem; line-height: 1.5;">横屏字体更加震撼<br>竖屏会自动折行以适应屏幕</p>
         <button class="ignore-btn" onclick="document.getElementById('orientation-hint').style.display='none'">
             忽略，继续竖屏
         </button>
     </div>
 
+    <!-- 轮次完成提示框 -->
+    <div id="toast"></div>
+
     <div class="container">
         
         <!-- 选择内容 -->
         <div id="selection-screen">
-            <h1>选择内容</h1>
+            <h1>请选择练习内容</h1>
             <div class="unit-list">
-                <input type="checkbox" id="u1" value="1" checked>
-                <label for="u1" class="unit-item"><strong>Unit 1 第一单元</strong><span>Greetings</span></label>
+                <!-- 默认去掉了 checked 属性，一开始全空 -->
+                <input type="checkbox" id="u1_w" value="1_w">
+                <label for="u1_w" class="unit-item"><strong>Unit 1 第一单元</strong><span>单词 Words</span></label>
+                
+                <input type="checkbox" id="u1_s" value="1_s">
+                <label for="u1_s" class="unit-item"><strong>Unit 1 第一单元</strong><span>句子 Sentences</span></label>
 
-                <input type="checkbox" id="u2" value="2" checked>
-                <label for="u2" class="unit-item"><strong>Unit 2 第二单元</strong><span>Numbers</span></label>
+                <input type="checkbox" id="u2_w" value="2_w">
+                <label for="u2_w" class="unit-item"><strong>Unit 2 第二单元</strong><span>单词 Words</span></label>
+                
+                <input type="checkbox" id="u2_s" value="2_s">
+                <label for="u2_s" class="unit-item"><strong>Unit 2 第二单元</strong><span>句子 Sentences</span></label>
 
-                <input type="checkbox" id="u3" value="3" checked>
-                <label for="u3" class="unit-item"><strong>Unit 3 第三单元</strong><span>Family</span></label>
+                <input type="checkbox" id="u3_w" value="3_w">
+                <label for="u3_w" class="unit-item"><strong>Unit 3 第三单元</strong><span>单词 Words</span></label>
+                
+                <input type="checkbox" id="u3_s" value="3_s">
+                <label for="u3_s" class="unit-item"><strong>Unit 3 第三单元</strong><span>句子 Sentences</span></label>
 
-                <input type="checkbox" id="u4" value="4" checked>
-                <label for="u4" class="unit-item"><strong>Unit 4 第四单元</strong><span>Classroom</span></label>
+                <input type="checkbox" id="u4_w" value="4_w">
+                <label for="u4_w" class="unit-item"><strong>Unit 4 第四单元</strong><span>单词 Words</span></label>
+                
+                <input type="checkbox" id="u4_s" value="4_s">
+                <label for="u4_s" class="unit-item"><strong>Unit 4 第四单元</strong><span>句子 Sentences</span></label>
 
-                <input type="checkbox" id="u5" value="5" checked>
-                <label for="u5" class="unit-item"><strong>Unit 5 第五单元</strong><span>Schoolbag</span></label>
+                <input type="checkbox" id="u5_w" value="5_w">
+                <label for="u5_w" class="unit-item"><strong>Unit 5 第五单元</strong><span>单词 Words</span></label>
+                
+                <input type="checkbox" id="u5_s" value="5_s">
+                <label for="u5_s" class="unit-item"><strong>Unit 5 第五单元</strong><span>句子 Sentences</span></label>
 
-                <input type="checkbox" id="u6" value="6" checked>
-                <label for="u6" class="unit-item"><strong>Unit 6 第六单元</strong><span>Colours</span></label>
+                <input type="checkbox" id="u6_w" value="6_w">
+                <label for="u6_w" class="unit-item"><strong>Unit 6 第六单元</strong><span>单词 Words</span></label>
+                
+                <input type="checkbox" id="u6_s" value="6_s">
+                <label for="u6_s" class="unit-item"><strong>Unit 6 第六单元</strong><span>句子 Sentences</span></label>
 
-                <input type="checkbox" id="u7" value="7" checked>
-                <label for="u7" class="unit-item"><strong>拓展内容</strong><span>Stories</span></label>
+                <input type="checkbox" id="u7_s" value="7_s">
+                <label for="u7_s" class="unit-item"><strong>拓展内容</strong><span>句子 Sentences</span></label>
             </div>
             <button class="start-btn" onclick="startGame()">开始练习 (Start)</button>
         </div>
 
-        <!-- 单词显示 -->
+        <!-- 卡片显示 -->
         <div id="game-screen">
             <div class="top-info">
-                <span>第 <b id="round-txt" style="color:var(--accent-color)">1</b> 轮</span>
-                <span id="unit-txt">Unit 1</span>
+                <span>第 <b id="round-txt">1</b> 轮</span>
+                <span id="unit-txt" style="font-weight: 600; color: var(--text-color);">Unit 1</span>
                 <span>剩余: <b id="left-txt">10</b></span>
             </div>
 
@@ -261,48 +359,85 @@
             </div>
 
             <div class="bottom-bar">
-                <button class="btn btn-exit" onclick="exitGame()">退出</button>
-                <button class="btn btn-next" onclick="nextCard()">下一个</button>
+                <button class="btn btn-exit" onclick="exitGame()">退出重选</button>
+                <button class="btn btn-next" onclick="nextCard()">下一个 ➔</button>
             </div>
         </div>
     </div>
 
     <script>
         const data = {
-            1: [
-                "hello", "nice", "meet", "you", "let's", "play", "I", "am", "I'm", "too", "Miss", "photo", "how", "say",
-                "Nice to meet you.", "Let's play.", "I'm Miss Li.", "How do you say “hello”."
+            "1_w":["pet", "bird", "dog", "cat", "fish", "rabbit", "friend"],
+            "1_s":[
+                "It's Yaya. It's my rabbit.", "It's Maomao. It's my cat.", "It's Dora. It's my bird.", 
+                "It's Snowball. It's my dog.", "And it's Orange. It's my fish!", "It's Nini. It's my cat.", 
+                "It's my friend Liu Yun's cat."
             ],
-            2: [
-                "number", "one", "two", "three", "four", "five", "six", "seven", "balloon", "thank", "please", "Numbers",
-                "Four balloons.", "Six balloons.", "Two balloons.", "One balloon.", "Thank you.", "Please say the number."
+            
+            "2_w":["animal", "they", "welcome", "zoo", "tiger", "lion", "bear", "monkey", "panda", "cute", "picture", "which", "from"],
+            "2_s":[
+                "What are they?", "Welcome to the zoo!", "Look! A tiger.", "Look! Two lions.", 
+                "Look! Three bears.", "Look! Four monkeys.", "And a panda!", "It's the zoo!", 
+                "It's a tiger.", "They're lions.", "Look at the bears.", "They're big.", 
+                "They're monkeys.", "They're cute.", "Look at picture 1.", "What are they?", "Look at my zoo!"
             ],
-            3: [
-                "family", "my", "mum", "dad", "grandpa", "grandma", "sister", "and", "brother", "this", "is", "love", "me", "tree",
-                "Meet my family.", "My sister and brother.", "This is my grandma.", "I love my grandma.", "This is Toby's mum.", "I love my family.", "This is Toby's sister, May."
+            
+            "3_w":["face", "eye", "ear", "nose", "mouth", "we", "twin", "have", "small", "same", "know", "now", "long", "hair", "short", "different", "touch", "your"],
+            "3_s":[
+                "My eyes.", "My ears.", "My nose.", "My mouth.", "This is my face!", "Hi, I'm Meimei.", 
+                "I'm Feifei.", "We are twins.", "I have big eyes.", "Me too.", "I have a small nose.", 
+                "I have a small mouth.", "We look the same.", "I know!", "Now I have long hair.", 
+                "I have short hair.", "We are different now.", "Play the game.", "Touch your nose.", 
+                "Touch your ears.", "Touch your eyes.", "Touch your mouth.", "This is Wang Na.", 
+                "No, it's me!", "I have big eyes and big ears.", "My mouth and nose are small.", 
+                "I have a big mouth.", "I have a long nose.", "I have no ears."
             ],
-            4: [
-                "classroom", "what", "open", "door", "blackboard", "window", "desk", "chair", "it", "big", "that", "teacher", "Good job!", "a(n)", "very", "old", "school", "look",
-                "What's this?", "Open the door.", "This is my chair.", "This is the blackboard.", "That is my teacher.", "Good job, May!", "This is my classroom."
+            
+            "4_w":["body", "come on", "boy", "girl", "rock", "move", "head", "hand", "arm", "leg", "foot", "feet", "robot", "cool", "monster", "aunt", "her", "part", "toy", "his", "name", "he", "swim", "fast", "she", "run", "strong", "basketball", "well"],
+            "4_s":[
+                "Come on, boys and girls.", "Let’s do the body rock!", "Move your head.", "Move your hands.", 
+                "Move your arms.", "Move your legs and feet!", "one foot", "two feet", 
+                "Look at my robot! It has a big head and two big feet!", "Cool! And it has long arms and long legs!", 
+                "Oh! No! Look!", "It has three heads and three arms!", "It's a monster!", 
+                "Ha ha! It's Aunt Lucy and her cat!", "It has two long arms and two big hands.", 
+                "It has four big hands, three long legs and three small feet.", "It has two short legs and two big feet.", 
+                "It has four arms and four legs.", "This is my toy. His name is Ted.", "He has a big head.", 
+                "This girl swims fast.", "She has long arms.", "This boy runs fast.", "He has strong legs.", 
+                "This boy plays basketball well.", "He has big hands!"
             ],
-            5: [
-                "schoolbag", "pencil case", "pencil", "book", "bye", "goodbye", "no", "here you are", "read", "together", "School things",
-                "Open my schoolbag.", "That’s Toby's book and pencil case.", "Let's read together.", "Here you are.", "Goodbye, dad!", "Look, this is my pencil case."
+            
+            "5_w":["home", "bed", "table", "sofa", "room", "sit down", "next", "day", "clean", "tidy", "OK", "amazing", "snow", "house", "tall", "live"],
+            "5_s":[
+                "It's a bed.", "It's a table.", "It's a sofa.", "Big rooms.", "Small rooms.", "It's my home!", 
+                "Tiantian, come to my home. Let's play!", "Oh, so many things!", "Here's the sofa. Please sit down.", 
+                "Come to my room. It's my bed.", "Oh, so many things!", "It's my table.", "Oh, so many things!", 
+                "The next day", "It's clean and tidy now. Let's play.", "Here's the sofa.", "My bed is clean.", 
+                "It's my table.", "This is my home. It's a sofa. It's yellow.", "Amazing homes in China", 
+                "This is my home. It's a snow house.", "Look at my room. It's small. It has a small table and a small bed.", 
+                "This is my home. It's a tulou. It's very big and tall!", "Many families live in a tulou. Look, it has so many rooms."
             ],
-            6: [
-                "colour", "red", "green", "blue", "black", "white", "yellow", "so", "many", "happy", "Chinese New Year", "stop", "go", "slow",
-                "What colour?", "Black white and yellow.", "Red green and blue.", "So many colors.", "Blue green red and yellow, Four colors.", "It’s green red and yellow.", "Happy Chinese New Year", "It's red, stop!", "It's green, go!", "It's yellow, slow!"
+            
+            "6_w":["time", "tall", "Mr", "wolf", "eight", "nine", "ten", "eleven", "twelve", "birthday", "lunch", "not", "yet", "busy", "clock"],
+            "6_s":[
+                "What's the time?", "Tell the time, Mr Wolf!", "It's eight.", "It's nine.", "It's ten.", 
+                "It's eleven.", "It's twelve. Run!", "Happy birthday, Dad!", "Thank you, Toby!", 
+                "Let's have lunch together!", "It's eleven.", "Dad is not home yet.", "It's twelve.", 
+                "Dad is busy.", "I know!", "Happy Birthday", "Look at the pictures.", "Tell the time.", 
+                "Amazing clocks", "Big Ben, London", "The clock tower of the Customs House, Shanghai", "The Century Clock, Tianjin"
             ],
-            7: [
-                "This is a very old school.", "That is an old school.", "Three books.", 
-                "That is an apple tree.", "This apple is very big.", "This is my apple.", "One apple now.", 
-                "The moon is in the water.", "Come and help.", "That is the moon.", "It’s still in the sky.", 
-                "Six people in my family.", "Friendly Shandong welcomes you!", 
-                "My brother is six, I love my brother.", "This is Mount Taishan."
+            
+            "7_s":[
+                "This is Shandong.", "Let's visit some famous houses in Shandong!", "It's Li Qingzhao's old home. It's nice.", 
+                "It's Wang Xizhi's old home. It's big!", "Look at the houses!", "They're cool.", "It's a seaweed house.", 
+                "Look! It's a siheyuan!", "I love Liuzi opera.", "This is Zhang Fei. Look at his face! It's black and white.", 
+                "Bao Zheng has a black face.", "Guan Yu has a red face.", "This man has a white face.", "I love animals.", 
+                "Let's look at some animals in Jinan Zoo!", "Look at the monkey! He is so cute.", "Look at the pandas!", 
+                "They are Ya Ji and Hua Ao. They are lovely!", "Now let's look at some fun “animals”!", "Look! Zhu Bajie has two big ears.", 
+                "Look at the tigers! They have big eyes!", "Look! It's a rabbit. It's lovely."
             ]
         };
 
-        let playQueue = [];
+        let playQueue =[];
         let index = 0;
         let round = 1;
 
@@ -315,11 +450,11 @@
 
         function startGame() {
             const checks = document.querySelectorAll('input[type="checkbox"]:checked');
-            if (checks.length === 0) { alert("请选择至少一个单元"); return; }
+            if (checks.length === 0) { alert("请先选择您要练习的内容哦~"); return; }
 
-            playQueue = [];
+            playQueue =[];
             checks.forEach(c => {
-                const u = parseInt(c.value);
+                const u = c.value;
                 data[u].forEach(txt => playQueue.push({t: txt, u: u}));
             });
 
@@ -337,12 +472,15 @@
             document.getElementById('selection-screen').style.display = 'flex';
         }
 
+        // 核心修改点：加入轮次判定和Toast提示
         function nextCard() {
             index++;
             if (index >= playQueue.length) {
+                // 当前轮次结束，轮数+1，并打乱数组重新开始
                 round++;
                 index = 0;
                 shuffle(playQueue);
+                showToast("🎉 第 " + (round - 1) + " 轮完成！<br>开始第 " + round + " 轮");
             }
             render();
         }
@@ -351,10 +489,18 @@
             const item = playQueue[index];
             const textEl = document.getElementById('text-content');
             
-            // 简单直接赋值，不进行任何字号计算
             textEl.innerText = item.t;
             
-            document.getElementById('unit-txt').innerText = item.u === 7 ? "故事" : "Unit " + item.u;
+            let unitStr = "";
+            if (item.u === "7_s") {
+                unitStr = "拓展 句子";
+            } else {
+                let unitNum = item.u.split('_')[0];
+                let type = item.u.split('_')[1] === "w" ? "单词" : "句子";
+                unitStr = "Unit " + unitNum + " " + type;
+            }
+            
+            document.getElementById('unit-txt').innerText = unitStr;
             document.getElementById('round-txt').innerText = round;
             
             let left = playQueue.length - (index + 1);
@@ -366,6 +512,21 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [arr[i], arr[j]] = [arr[j], arr[i]];
             }
+        }
+
+        // 显示Toast提示框的函数
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = msg; // 支持换行标签
+            toast.classList.add('show');
+            
+            // 如果连续触发，清除上一个定时器
+            if (toastTimeout) clearTimeout(toastTimeout);
+            
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500); // 显示 2.5 秒后消失
         }
     </script>
 </body>
