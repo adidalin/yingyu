@@ -221,38 +221,53 @@
             animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* 选底按钮组 */
+        /* ---------------- 统一按钮系统 ---------------- */
+        .btn {
+            border: none;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.2s ease,
+                        background 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            font-family: inherit;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* 主操作：渐变 */
+        .btn-primary {
+            background: var(--btn-gradient);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.22);
+        }
+        .btn-primary:active { box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12); }
+
+        /* 次要操作：浅灰 */
+        .btn-secondary {
+            background: #f1f5f9;
+            color: var(--gray-text);
+        }
+        .btn-secondary:active { background: #e2e8f0; }
+
+        /* 错题/危险：红色浅底 */
+        .btn-danger {
+            background: rgba(255, 118, 117, 0.1);
+            color: var(--mistake-color);
+            border: 1px solid rgba(255, 118, 117, 0.18);
+        }
+        .btn-danger:active { background: rgba(255, 118, 117, 0.18); }
+
+        /* 选卡底栏 */
         .selection-bottom {
             display: flex;
             gap: 12px;
             margin-top: 12px;
         }
-        .selection-bottom button {
-            flex: 1;
-            padding: 16px;
-            border: none;
-            border-radius: 18px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .mistake-book-btn {
-            background: #fff3e0;
-            color: #e65100;
-            box-shadow: 0 4px 12px rgba(230, 81, 0, 0.08);
-            flex: 0.45 !important;
-        }
-        .mistake-book-btn:active { transform: scale(0.96); }
-
-        .start-btn {
-            background: var(--btn-gradient);
-            color: white;
-            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.25);
-        }
-        .start-btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+        .selection-bottom .btn {
+            padding: 15px;
         }
 
         /* ---------------- 2. 练习界面 ---------------- */
@@ -323,55 +338,14 @@
             }
         }
 
-        /* 底部操作栏 */
+        /* 练习底栏 */
         .bottom-bar {
             display: flex;
             gap: 10px;
             height: 64px;
         }
-
-        .btn {
-            border: none;
-            border-radius: 18px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
+        .bottom-bar .btn {
             height: 100%;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        .btn-exit { 
-            flex: 0.8; 
-            background: #f1f5f9; 
-            color: var(--gray-text); 
-        }
-        .btn-exit:active { transform: scale(0.95); background: #e2e8f0; }
-        
-        .btn-prev { 
-            flex: 0.6; 
-            background: #e2e8f0; 
-            color: var(--text-color);
-            font-size: 1.1rem;
-        }
-        .btn-prev:active { transform: scale(0.95); }
-
-        .btn-mistake { 
-            flex: 1.1; 
-            background: rgba(255, 118, 117, 0.1); 
-            color: var(--mistake-color);
-            border: 1px solid rgba(255, 118, 117, 0.2);
-        }
-        .btn-mistake:active { transform: scale(0.97); background: rgba(255, 118, 117, 0.18); }
-
-        .btn-next { 
-            flex: 1.4; 
-            background: var(--btn-gradient); 
-            color: white;
-            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2);
-        }
-        .btn-next:active { 
-            transform: scale(0.97);
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
         }
 
         /* 移动端横向或极矮屏幕自适应适配 */
@@ -478,27 +452,18 @@
             border-top: 1px solid var(--border-color);
             padding-top: 12px;
         }
+        .mistake-bottom .btn {
+            padding: 15px;
+        }
 
-        .mistake-bottom button {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 16px;
-            font-size: 1rem;
+        /* ---------------- 标记提示 ---------------- */
+        .mark-hint {
+            text-align: center;
+            font-size: 0.95rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .mistake-back-btn {
-            background: #f1f5f9;
-            color: var(--gray-text);
-        }
-
-        .mistake-clear-btn {
-            background: rgba(255, 118, 117, 0.1);
             color: var(--mistake-color);
-            border: 1px solid rgba(255, 118, 117, 0.15);
+            min-height: 1.2em;
+            margin: 6px 0 4px;
         }
 
         /* ---------------- Toast 提示 ---------------- */
@@ -608,8 +573,8 @@
                 <label for="u7_s" class="unit-item"><strong>✨ 拓展内容 ✨</strong><span>句子 Sentences</span></label>
             </div>
             <div class="selection-bottom">
-                <button class="mistake-book-btn" onclick="viewMistakeBook()">📚 错题本</button>
-                <button class="start-btn" onclick="startGame()">▶ 开始练习</button>
+                <button class="btn btn-danger" style="flex:0.5" onclick="viewMistakeBook()">📚 错题本</button>
+                <button class="btn btn-primary" style="flex:1" onclick="startGame()">▶ 开始练习</button>
             </div>
         </div>
 
@@ -628,10 +593,10 @@
             <div id="mark-hint" class="mark-hint"></div>
 
             <div class="bottom-bar">
-                <button class="btn btn-exit" onclick="exitGame()">⟲ 退出</button>
-                <button class="btn btn-prev" onclick="prevCard()">👈</button>
-                <button class="btn btn-mistake" onclick="markMistake()">❌ 不认识</button>
-                <button class="btn btn-next" onclick="nextCard()">继续 ➔</button>
+                <button class="btn btn-secondary" style="flex:0.8" onclick="exitGame()">⟲ 退出</button>
+                <button class="btn btn-secondary" style="flex:0.6" onclick="prevCard()">👈</button>
+                <button class="btn btn-danger" id="mistake-btn" style="flex:1.1" onclick="markMistake()">❌ 不认识</button>
+                <button class="btn btn-primary" style="flex:1.4" onclick="nextCard()">继续 ➔</button>
             </div>
         </div>
 
@@ -645,8 +610,9 @@
                 <div class="mistake-empty">暂无错题 (´∇｀)</div>
             </div>
             <div class="mistake-bottom">
-                <button class="mistake-back-btn" onclick="backFromMistakeBook()">返回</button>
-                <button class="mistake-clear-btn" onclick="clearMistakeBook()">清空错题本</button>
+                <button class="btn btn-secondary" style="flex:1" onclick="backFromMistakeBook()">返回</button>
+                <button class="btn btn-primary" id="practice-mistake-btn" style="flex:1.3" onclick="startMistakePractice()">▶ 练习错题</button>
+                <button class="btn btn-danger" style="flex:1.1" onclick="clearMistakeBook()">清空错题本</button>
             </div>
         </div>
     </div>
@@ -723,11 +689,16 @@
             ]
         };
 
+        // 错题本本地缓存配置
+        const MISTAKE_STORAGE_KEY = 'yingyu_mistake_book';
+        const MISTAKE_EXPIRE_DAYS = 30; // 未登录情况下错题本缓存保留天数
+
         let playQueue = [];
         let index = 0;
         let round = 1;
-        let mistakeBook = []; 
-        let isMarked = false; 
+        let mistakeBook = loadMistakeBook(); // 启动时从本地缓存恢复
+        let isMarked = false;
+        let isMistakePractice = false; // 是否处于"错题练习"模式
 
         // ============ 工具函数 ============
 
@@ -771,6 +742,47 @@
             if (toastTimeout) clearTimeout(toastTimeout);
         }
 
+        // ============ 错题本本地缓存 ============
+
+        // 从 localStorage 读取错题本（带过期检查）
+        function loadMistakeBook() {
+            try {
+                const raw = localStorage.getItem(MISTAKE_STORAGE_KEY);
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed !== 'object') return [];
+                const now = Date.now();
+                const savedAt = parsed.savedAt || 0;
+                const expireMs = MISTAKE_EXPIRE_DAYS * 24 * 60 * 60 * 1000;
+                if (savedAt && (now - savedAt > expireMs)) {
+                    // 超过保留期，清除过期数据
+                    localStorage.removeItem(MISTAKE_STORAGE_KEY);
+                    return [];
+                }
+                const list = Array.isArray(parsed.list) ? parsed.list.filter(m => m && m.t && m.u) : [];
+                return list;
+            } catch (e) {
+                return [];
+            }
+        }
+
+        // 保存错题本到 localStorage（每次保存刷新时间戳，活跃使用不会过期）
+        function saveMistakeBook() {
+            try {
+                if (!Array.isArray(mistakeBook) || mistakeBook.length === 0) {
+                    localStorage.removeItem(MISTAKE_STORAGE_KEY);
+                    return;
+                }
+                const payload = {
+                    savedAt: Date.now(),
+                    list: mistakeBook
+                };
+                localStorage.setItem(MISTAKE_STORAGE_KEY, JSON.stringify(payload));
+            } catch (e) {
+                // 隐私模式 / 存储空间不足时静默失败，不影响使用
+            }
+        }
+
         // ============ 选择界面 ============
 
         function startGame() {
@@ -809,6 +821,16 @@
 
             index++;
             if (index >= playQueue.length) {
+                if (isMistakePractice) {
+                    // 错题练习一轮结束
+                    if (mistakeBook.length === 0) {
+                        showToast('🎉 太棒了！错题全部掌握！');
+                    } else {
+                        showToast('🎉 本轮练习完成！<br><span style="font-size:1.1rem;color:#a5b4fc;">还剩 ' + mistakeBook.length + ' 题继续加油</span>');
+                    }
+                    setTimeout(() => exitGame(), 1800);
+                    return;
+                }
                 round++;
                 index = 0;
                 shuffle(playQueue);
@@ -832,7 +854,28 @@
         function markMistake() {
             const item = playQueue[index];
             if (!item) return;
-            
+
+            // 错题练习模式：点击表示"已掌握"，从错题本移除并进入下一题
+            if (isMistakePractice) {
+                mistakeBook = mistakeBook.filter(m => !(m && m.t === item.t && m.u === item.u));
+                saveMistakeBook();
+                if (mistakeBook.length === 0) {
+                    showToast('🎉 太棒了！错题全部掌握！');
+                    setTimeout(() => exitGame(), 1500);
+                    return;
+                }
+                // 前进到下一题（不调用 nextCard 以保留进度反馈）
+                index++;
+                if (index >= playQueue.length) {
+                    showToast('🎉 本轮练习完成！<br><span style="font-size:1.1rem;color:#a5b4fc;">还剩 ' + mistakeBook.length + ' 题继续加油</span>');
+                    setTimeout(() => exitGame(), 1800);
+                    return;
+                }
+                isMarked = false;
+                render();
+                return;
+            }
+
             if (isMarked) {
                 mistakeBook = mistakeBook.filter(m => !(m && m.t === item.t && m.u === item.u));
                 isMarked = false;
@@ -847,6 +890,7 @@
                 isMarked = true;
                 document.getElementById('mark-hint').innerText = '✓ 已标记为不认识';
             }
+            saveMistakeBook();
         }
 
         function render() {
@@ -854,18 +898,26 @@
             if (!item) return;
 
             const textEl = document.getElementById('text-content');
-            
+
             // 写入文本
             textEl.innerText = item.t;
-            
+
             // 单元信息
-            document.getElementById('unit-txt').innerText = getUnitName(item.u);
+            if (isMistakePractice) {
+                document.getElementById('unit-txt').innerText = '📚 错题练习';
+            } else {
+                document.getElementById('unit-txt').innerText = getUnitName(item.u);
+            }
             document.getElementById('round-txt').innerText = round;
-            
-            // 剩余数量
-            let left = playQueue.length - (index + 1);
-            document.getElementById('left-txt').innerText = left < 0 ? 0 : left;
-            
+
+            // 剩余数量：练习模式显示错题本剩余，普通模式显示队列剩余
+            if (isMistakePractice) {
+                document.getElementById('left-txt').innerText = mistakeBook.length;
+            } else {
+                let left = playQueue.length - (index + 1);
+                document.getElementById('left-txt').innerText = left < 0 ? 0 : left;
+            }
+
             // 重置标记状态显示
             if (Array.isArray(mistakeBook)) {
                 isMarked = mistakeBook.some(m => m && m.t === item.t && m.u === item.u);
@@ -875,7 +927,10 @@
             }
 
             const markHint = document.getElementById('mark-hint');
-            if (isMarked) {
+            if (isMistakePractice) {
+                // 练习模式不显示"已标记"提示，避免误导
+                markHint.innerText = '';
+            } else if (isMarked) {
                 markHint.innerText = '✓ 已标记为不认识';
             } else {
                 markHint.innerText = '';
@@ -883,6 +938,9 @@
         }
 
         function exitGame() {
+            isMistakePractice = false;
+            const mistakeBtn = document.getElementById('mistake-btn');
+            if (mistakeBtn) mistakeBtn.innerText = '❌ 不认识';
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('selection-screen').style.display = 'flex';
         }
@@ -892,9 +950,13 @@
         function viewMistakeBook() {
             const container = document.getElementById('mistake-list-container');
             const badge = document.getElementById('mistake-count');
-            
+            const practiceBtn = document.getElementById('practice-mistake-btn');
+
             badge.innerText = mistakeBook.length + '个';
-            
+            if (practiceBtn) {
+                practiceBtn.disabled = (!mistakeBook || mistakeBook.length === 0);
+            }
+
             if (mistakeBook.length === 0) {
                 container.innerHTML = '<div class="mistake-empty">暂无错题 (´∇｀)</div>';
             } else {
@@ -920,6 +982,30 @@
             document.getElementById('mistake-screen').style.display = 'flex';
         }
 
+        // 开始错题练习：用错题本内容构建练习队列
+        function startMistakePractice() {
+            if (!mistakeBook || mistakeBook.length === 0) {
+                showToast('错题本还是空的哦~');
+                return;
+            }
+            hideToast();
+            isMistakePractice = true;
+            isMarked = false;
+
+            playQueue = mistakeBook.map(m => ({t: m.t, u: m.u}));
+            shuffle(playQueue);
+            index = 0;
+            round = 1;
+
+            // 切换"不认识"按钮为"已掌握"
+            const mistakeBtn = document.getElementById('mistake-btn');
+            if (mistakeBtn) mistakeBtn.innerText = '✓ 已掌握';
+
+            document.getElementById('mistake-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+            render();
+        }
+
         function backFromMistakeBook() {
             document.getElementById('mistake-screen').style.display = 'none';
             document.getElementById('selection-screen').style.display = 'flex';
@@ -928,6 +1014,7 @@
         function clearMistakeBook() {
             if (confirm('确定要清空所有错题吗？')) {
                 mistakeBook = [];
+                saveMistakeBook();
                 viewMistakeBook();
             }
         }
