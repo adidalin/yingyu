@@ -5,38 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>小学英语闪卡 (高新区凤凰学校1年级专用)</title>
     <style>
+        /* --- 高级现代感 & 亲和力配色变量体系 --- */
         :root {
-            /* 单一品牌色 + 中性灰阶，去掉一切渐变与紫蓝默认色 */
-            --bg: #f5f6f4;
+            --bg: #f8fafc;
+            --container-bg: #ffffff;
             --card-bg: #ffffff;
-            --ink: #1f2a37;        /* 主文字 */
-            --ink-soft: #6b7280;   /* 次文字 */
-            --line: #e5e7eb;       /* 分割线/描边 */
-            --brand: #0e7490;      /* 主色：深青，非 indigo */
-            --brand-deep: #0b5566; /* 主色加深 */
-            --brand-soft: #e8f2f4; /* 主色浅底 */
-            --danger: #dc2626;     /* 危险红实色 */
-            --danger-soft: #fef2f2;
-            --radius-btn: 10px;    /* 按钮统一圆角 */
-            --radius-card: 14px;   /* 卡片圆角 */
-
-            /* 旧变量兼容映射（指向新值，避免大范围改动出错） */
-            --bg-gradient: var(--bg);
-            --accent-primary: var(--brand);
-            --accent-secondary: var(--brand);
-            --btn-gradient: var(--brand);
-            --text-color: var(--ink);
-            --gray-text: var(--ink-soft);
-            --border-color: var(--line);
-            --success-color: #059669;
-            --mistake-color: var(--danger);
+            
+            /* 精致墨色与高级中性灰 */
+            --ink: #0f172a;        
+            --ink-soft: #64748b;   
+            --line: #e2e8f0;       
+            
+            /* 充满生机的品牌彩色体系（儿童友好，告别死板） */
+            --brand: #4f46e5;      
+            --brand-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            --brand-soft: #f0fdf4; 
+            --success: #10b981;
+            --success-soft: #ecfdf5;
+            
+            /* 柔和的警示红 */
+            --danger: #f43f5e;     
+            --danger-soft: #fff1f2;
+            --danger-gradient: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
+            
+            /* 单元卡片专属高质感色彩 */
+            --tag-word-bg: #eff6ff;
+            --tag-word-color: #1d4ed8;
+            --tag-sentence-bg: #fef3c7;
+            --tag-sentence-color: #b45309;
+            
+            /* 现代圆角与阴影 */
+            --radius-btn: 14px;    
+            --radius-card: 20px;   
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 12px 34px rgba(15, 23, 42, 0.06);
+            --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.03);
         }
 
-        body {
+        /* 极简流畅滚动条 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
             background: var(--bg);
+            color: var(--ink);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -44,20 +65,15 @@
             align-items: center;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            position: relative;
         }
 
-        /* 隐藏滚动条但保留滚动功能 */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 10px; }
-
-        /* ---------------- 横屏建议提示 ---------------- */
+        /* ---------------- 横屏高级建议提示 ---------------- */
         #orientation-hint {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #1f2a37;
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(12px);
             z-index: 9999;
             flex-direction: column;
             align-items: center;
@@ -65,6 +81,7 @@
             color: white;
             text-align: center;
             animation: fadeIn 0.4s ease;
+            padding: 20px;
         }
 
         @media screen and (orientation: portrait) and (max-width: 800px) {
@@ -72,38 +89,41 @@
         }
 
         .ignore-btn {
-            margin-top: 25px;
-            padding: 12px 35px;
-            border: 1px solid rgba(255,255,255,0.4);
+            margin-top: 30px;
+            padding: 14px 40px;
+            border: 1px solid rgba(255,255,255,0.25);
             background: rgba(255,255,255,0.1);
             color: white;
-            border-radius: 10px;
+            border-radius: var(--radius-btn);
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s ease, transform 0.2s ease;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
         }
         .ignore-btn:hover, .ignore-btn:active {
             background: white;
-            color: #1f2a37;
+            color: var(--ink);
             transform: translateY(-2px);
         }
 
-        /* ---------------- 主容器 ---------------- */
+        /* ---------------- 外层主容器 ---------------- */
         .container {
-            background-color: var(--card-bg);
-            width: 95%;
-            height: 95%;
-            border-radius: 20px;
+            background-color: var(--container-bg);
+            width: 96%;
+            height: 96%;
+            max-width: 1200px;
+            max-height: 800px;
+            border-radius: 24px;
             display: flex;
             flex-direction: column;
-            padding: 24px;
-            box-sizing: border-box;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
             border: 1px solid var(--line);
+            position: relative;
         }
 
-        /* ---------------- 1. 选卡界面 ---------------- */
+        /* ---------------- 1. 选卡主界面 ---------------- */
         #selection-screen {
             flex: 1;
             display: flex;
@@ -114,175 +134,206 @@
 
         h1 {
             text-align: center;
-            margin: 0 0 16px 0;
-            font-size: 1.8rem;
+            margin: 0 0 24px 0;
+            font-size: 2rem;
             font-weight: 800;
             color: var(--ink);
-            letter-spacing: -0.3px;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        h1::before {
+            content: "✨";
+            font-size: 1.6rem;
         }
 
         .unit-list {
             flex: 1;
             overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-            gap: 12px;
-            padding: 4px 6px 16px 4px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            padding: 6px 6px 20px 6px;
             align-content: start;
         }
 
-        /* 单元卡片 */
+        /* 高级卡片式单选/多选框 */
         .unit-item {
-            background: #fff;
-            border: 1px solid var(--line);
+            background: var(--card-bg);
+            border: 2px solid var(--line);
             border-radius: var(--radius-card);
-            padding: 16px 10px;
+            padding: 20px 14px;
             text-align: center;
             cursor: pointer;
-            transition: border-color .18s ease, background .18s ease, transform .12s ease;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         .unit-item:hover {
-            transform: translateY(-2px);
-            border-color: var(--brand);
+            transform: translateY(-4px);
+            border-color: #cbd5e1;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
         }
 
         .unit-item strong { 
             display: block; 
-            font-size: 1.05rem; 
+            font-size: 1.1rem; 
             font-weight: 700;
-            color: var(--text-color); 
-            margin-bottom: 6px; 
+            color: var(--ink); 
+            line-height: 1.3;
         }
+        
         .unit-item span {
             font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--ink-soft);
-            background: #f3f4f6;
-            padding: 3px 8px;
-            border-radius: 8px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+
+        /* 根据自定义属性渲染颜色外观 */
+        .unit-item [span-type="w"] {
+            background: var(--tag-word-bg);
+            color: var(--tag-word-color);
+        }
+        .unit-item [span-type="s"] {
+            background: var(--tag-sentence-bg);
+            color: var(--tag-sentence-color);
         }
 
         input[type="checkbox"] { display: none; }
         
-        /* 选中状态 */
+        /* 选中状态：呼吸跃动高级感 */
         input[type="checkbox"]:checked + .unit-item {
-            background-color: var(--brand-soft);
+            background-color: #f5f3ff;
             border-color: var(--brand);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
         }
         input[type="checkbox"]:checked + .unit-item strong { color: var(--brand); }
-        input[type="checkbox"]:checked + .unit-item span { background: #fff; color: var(--brand); }
 
-        /* 选中徽章 */
+        /* 极简对勾徽章 */
         input[type="checkbox"]:checked + .unit-item::after {
             content: "✓";
             position: absolute;
-            top: -6px;
-            right: -6px;
-            background: var(--brand);
+            top: -8px;
+            right: -8px;
+            background: var(--brand-gradient);
             color: white;
             font-weight: bold;
-            font-size: 0.85rem;
-            width: 22px;
-            height: 22px;
+            font-size: 0.9rem;
+            width: 26px;
+            height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            border: 2px solid #fff;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
             animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* ---------------- 统一按钮系统（同一品牌色，靠填充层级区分） ---------------- */
+        /* ---------------- 统一全功能按钮体系 ---------------- */
         .btn {
-            border: 1.5px solid transparent;
+            border: 2px solid transparent;
             background: transparent;
             border-radius: var(--radius-btn);
-            font-size: 1rem;
-            font-weight: 600;
-            line-height: 1;
+            font-size: 1.05rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            min-height: 44px;
-            transition: background .18s ease, border-color .18s ease,
-                        color .18s ease, transform .1s ease;
-            -webkit-tap-highlight-color: transparent;
+            min-height: 52px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
         }
-        .btn:active { transform: scale(0.97); }
-        .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+        .btn:active { transform: scale(0.96); }
+        .btn:disabled { opacity: .35; cursor: not-allowed; transform: none !important; }
 
-        /* 主操作：主色实填 */
         .btn-primary {
-            background: var(--brand);
+            background: var(--brand-gradient);
             color: #fff;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
         }
-        .btn-primary:hover { background: var(--brand-deep); }
+        .btn-primary:hover { 
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+            transform: translateY(-1px);
+        }
 
-        /* 次要：白底 + 主色描边 + 主色字 */
         .btn-secondary {
             background: #fff;
             color: var(--brand);
             border-color: var(--brand);
         }
-        .btn-secondary:hover { background: var(--brand-soft); }
+        .btn-secondary:hover { background: #f5f3ff; }
 
-        /* 幽灵：透明 + 灰描边，弱操作 */
         .btn-ghost {
-            background: transparent;
+            background: #f1f5f9;
             color: var(--ink-soft);
-            border-color: var(--line);
         }
-        .btn-ghost:hover { background: #f3f4f6; color: var(--ink); }
+        .btn-ghost:hover { background: #e2e8f0; color: var(--ink); }
 
-        /* 危险：实色红，破坏性操作 */
         .btn-danger {
-            background: var(--danger);
+            background: var(--danger-gradient);
             color: #fff;
+            box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3);
         }
-        .btn-danger:hover { background: #b91c1c; }
+        .btn-danger:hover { box-shadow: 0 6px 20px rgba(244, 63, 94, 0.45); }
 
-        /* 弱危险：白底 + 红描边 + 红字，如"不认识"标记 */
         .btn-danger-soft {
-            background: #fff;
+            background: var(--danger-soft);
             color: var(--danger);
-            border-color: #fecaca;
+            border-color: #fecdd3;
         }
-        .btn-danger-soft:hover { background: var(--danger-soft); }
+        .btn-danger-soft:hover { background: #ffe4e6; }
 
-        /* 选卡底栏 */
         .selection-bottom {
             display: flex;
-            gap: 12px;
-            margin-top: 12px;
+            gap: 16px;
+            margin-top: 16px;
         }
-        .selection-bottom .btn {
-            padding: 15px;
-        }
+        .selection-bottom .btn { padding: 16px; }
 
-        /* ---------------- 2. 练习界面 ---------------- */
+        /* ---------------- 2. 核心闪卡练习界面 ---------------- */
         #game-screen {
             display: none;
             flex-direction: column;
             height: 100%;
-            animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* 顶部状态栏 */
         .top-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: var(--gray-text);
-            font-size: 1rem;
-            font-weight: 700;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed var(--border-color);
+            color: var(--ink-soft);
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding-bottom: 16px;
+            border-bottom: 2px dashed var(--line);
         }
-        .top-info b { color: var(--text-color); }
-        .top-info #round-txt { color: var(--brand); font-size: 1.15rem; }
-        .top-info #unit-txt { background: #f3f4f6; padding: 4px 10px; border-radius: 8px; color: var(--brand); }
+        .top-info b { color: var(--ink); font-weight: 800; }
+        .top-info #round-txt { color: var(--brand); font-size: 1.3rem; }
+        .top-info #unit-txt { 
+            background: #f1f5f9; 
+            padding: 6px 14px; 
+            border-radius: 30px; 
+            color: var(--ink); 
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-inner);
+        }
+        .top-info #left-txt { color: var(--brand); }
 
-        /* 卡片显示区域 */
+        /* 超级拟物化中央核心闪卡 */
         .card-display {
             flex: 1;
             display: flex;
@@ -291,185 +342,212 @@
             width: 100%;
             cursor: pointer;
             box-sizing: border-box;
-            background: #ffffff;
-            margin: 15px 0;
+            background: #fff;
+            /* 英文字体线网格背景 */
+            background-image: linear-gradient(rgba(226, 232, 240, 0.5) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(226, 232, 240, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            margin: 20px 0;
             border-radius: var(--radius-card);
-            border: 1px solid var(--line);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-            transition: transform 0.15s ease;
+            border: 2px solid var(--line);
+            box-shadow: var(--shadow-sm), var(--shadow-inner);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
-        .card-display:active {
-            transform: scale(0.98);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.02);
+        
+        .card-display::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
         }
 
+        .card-display:active {
+            transform: scale(0.985);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+            background-color: #fafafa;
+        }
+
+        /* 📌 100% 恢复您原始代码中的闪卡字体大小配置 */
         #text-content {
             font-weight: 800;
-            color: var(--text-color);
+            color: var(--ink);
             text-align: center;
             line-height: 1.25;
             word-wrap: break-word;   
             overflow-wrap: break-word;
             padding: 0 12px;
-            
-            /* 恢复最初始桌面端字号：8rem */
-            font-size: 8rem; 
+            font-size: 6.5rem; /* 100% 恢复桌面端原始大小 */
+            text-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
         }
 
-        /* 手机端（以及竖屏状态）：在最初始的 4.5rem 基础上小 10%，即 4.05rem */
+        /* 📌 100% 恢复您原始代码中的移动端/竖屏自适应字号大小 */
         @media screen and (max-width: 768px), screen and (orientation: portrait) {
-            #text-content {
-                font-size: 4.05rem; 
+            #text-content { 
+                font-size: 3.85rem; /* 100% 恢复手机端原始大小 */
             }
         }
 
-        /* 练习底栏 */
+        /* 练习操作底栏 */
         .bottom-bar {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             height: 64px;
         }
-        .bottom-bar .btn {
-            height: 100%;
+        .bottom-bar .btn { height: 100%; }
+
+        /* 高度过矮设备的紧凑完美适配 */
+        @media screen and (max-height: 620px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.5rem; margin-bottom: 12px; }
+            .bottom-bar { height: 52px; }
+            .card-display { margin: 12px 0; }
+            .unit-item { padding: 12px 8px; }
         }
 
-        /* 移动端横向或极矮屏幕自适应适配 */
-        @media screen and (max-height: 580px) {
-            .container { padding: 15px; }
-            h1 { font-size: 1.4rem; margin-bottom: 8px; }
-            .bottom-bar { height: 50px; }
-            .btn { font-size: 0.95rem; border-radius: 14px; }
-            .card-display { margin: 8px 0; border-radius: 18px; }
-        }
-
-        /* ---------------- 3. 错题本界面 ---------------- */
+        /* ---------------- 3. 高级错题本界面 ---------------- */
         #mistake-screen {
             display: none;
             flex-direction: column;
             height: 100%;
-            animation: slideInRight 0.35s ease;
+            animation: slideInRight 0.4s ease;
         }
 
         .mistake-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--line);
         }
 
         .mistake-header h2 {
             margin: 0;
-            color: var(--text-color);
-            font-size: 1.4rem;
+            color: var(--ink);
+            font-size: 1.6rem;
             font-weight: 800;
         }
 
         .mistake-header .badge {
-            background: var(--brand-soft);
-            color: var(--brand);
-            padding: 5px 12px;
-            border-radius: 8px;
+            background: var(--danger-soft);
+            color: var(--danger);
+            padding: 6px 16px;
+            border-radius: 30px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            border: 1px solid #fecdd3;
         }
 
         .mistake-list {
             flex: 1;
             overflow-y: auto;
-            padding: 12px 0;
+            padding: 16px 4px;
         }
 
         .mistake-item {
-            background: #fff;
+            background: var(--card-bg);
             border: 1px solid var(--line);
-            padding: 14px;
-            margin-bottom: 10px;
+            padding: 18px 20px;
+            margin-bottom: 12px;
             border-radius: var(--radius-card);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease;
+        }
+        .mistake-item:hover {
+            transform: translateX(2px);
+            border-color: #cbd5e1;
         }
 
         .mistake-item-text .text {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 4px;
+            color: var(--ink);
+            margin-bottom: 6px;
             word-break: break-word;
         }
 
         .mistake-item-text .unit {
-            font-size: 0.8rem;
-            color: var(--gray-text);
+            font-size: 0.85rem;
+            color: var(--ink-soft);
             font-weight: 600;
+            display: inline-block;
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 6px;
         }
 
         .mistake-item .count {
-            background: var(--brand);
+            background: var(--danger-gradient);
             color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+            min-width: 30px;
+            height: 30px;
+            padding: 0 8px;
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 0.85rem;
-            margin-left: 12px;
+            margin-left: 16px;
             flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(244, 63, 94, 0.3);
         }
 
         .mistake-empty {
             text-align: center;
-            padding: 50px 20px;
-            color: var(--gray-text);
-            font-size: 1rem;
+            padding: 80px 20px;
+            color: var(--ink-soft);
+            font-size: 1.1rem;
             font-weight: 600;
         }
 
         .mistake-bottom {
             display: flex;
-            gap: 12px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 12px;
+            gap: 16px;
+            border-top: 2px solid var(--line);
+            padding-top: 16px;
         }
-        .mistake-bottom .btn {
-            padding: 15px;
-        }
+        .mistake-bottom .btn { padding: 16px; }
 
-        /* ---------------- 标记提示 ---------------- */
+        /* ---------------- 下方标记动态提示 ---------------- */
         .mark-hint {
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 700;
-            color: var(--mistake-color);
-            min-height: 1.2em;
-            margin: 6px 0 4px;
+            color: var(--danger);
+            min-height: 1.5em;
+            margin: 4px 0 8px;
+            letter-spacing: 0.5px;
+            animation: popIn 0.2s ease;
         }
 
-        /* ---------------- Toast 提示 ---------------- */
+        /* ---------------- 全局高级大 Toast 弹窗 ---------------- */
         #toast {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: #1f2a37;
+            transform: translate(-50%, -50%) scale(0.85);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
             color: #fff;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            font-weight: 600;
+            padding: 20px 36px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10000;
             pointer-events: none;
             text-align: center;
-            line-height: 1.4;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            line-height: 1.5;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
         #toast.show {
             opacity: 1;
@@ -477,93 +555,90 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* ---------------- 动画库 ---------------- */
+        /* ---------------- 精致流畅动画库 ---------------- */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.6); }
+            0% { opacity: 0; transform: scale(0.8); }
             100% { opacity: 1; transform: scale(1); }
         }
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(20px); }
+            from { opacity: 0; transform: translateX(30px); }
             to { opacity: 1; transform: translateX(0); }
         }
     </style>
 </head>
 <body>
 
-    <!-- 横屏提示 -->
     <div id="orientation-hint">
-        <h2 style="margin:0; font-size: 1.8rem; font-weight: 800;">建议横屏使用</h2>
-        <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.5; margin-top: 8px;">横屏体验更佳！<br>竖屏会自动缩放字号以完全适配屏幕</p>
+        <h2 style="margin:0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">📖 建议横屏使用</h2>
+        <p style="color: #94a3b8; font-size: 1.05rem; line-height: 1.6; margin-top: 12px; max-width: 320px;">
+            横屏下英文显示更完美！竖屏状态下会自动为您微调缩放字号。
+        </p>
         <button class="ignore-btn" onclick="document.getElementById('orientation-hint').style.display='none'">
-            忽略，继续竖屏
+            忽略，继续使用
         </button>
     </div>
 
-    <!-- 轮次完成提示框 -->
     <div id="toast"></div>
 
     <div class="container">
         
-        <!-- 选择内容 -->
         <div id="selection-screen">
-            <h1>请选择练习内容</h1>
+            <h1>小学英语闪卡练习</h1>
             <div class="unit-list">
-                <!-- 全空初始状态 -->
                 <input type="checkbox" id="u1_w" value="1_w">
-                <label for="u1_w" class="unit-item"><strong>Unit 1 第一单元</strong><span>单词 Words</span></label>
+                <label for="u1_w" class="unit-item"><strong>Unit 1 第一单元</strong><span span-type="w">单词 Words</span></label>
                 
                 <input type="checkbox" id="u1_s" value="1_s">
-                <label for="u1_s" class="unit-item"><strong>Unit 1 第一单元</strong><span>句子 Sentences</span></label>
+                <label for="u1_s" class="unit-item"><strong>Unit 1 第一单元</strong><span span-type="s">句子 Sentences</span></label>
 
                 <input type="checkbox" id="u2_w" value="2_w">
-                <label for="u2_w" class="unit-item"><strong>Unit 2 第二单元</strong><span>单词 Words</span></label>
+                <label for="u2_w" class="unit-item"><strong>Unit 2 第二单元</strong><span span-type="w">单词 Words</span></label>
                 
                 <input type="checkbox" id="u2_s" value="2_s">
-                <label for="u2_s" class="unit-item"><strong>Unit 2 第二单元</strong><span>句子 Sentences</span></label>
+                <label for="u2_s" class="unit-item"><strong>Unit 2 第二单元</strong><span span-type="s">句子 Sentences</span></label>
 
                 <input type="checkbox" id="u3_w" value="3_w">
-                <label for="u3_w" class="unit-item"><strong>Unit 3 第三单元</strong><span>单词 Words</span></label>
+                <label for="u3_w" class="unit-item"><strong>Unit 3 第三单元</strong><span span-type="w">单词 Words</span></label>
                 
                 <input type="checkbox" id="u3_s" value="3_s">
-                <label for="u3_s" class="unit-item"><strong>Unit 3 第三单元</strong><span>句子 Sentences</span></label>
+                <label for="u3_s" class="unit-item"><strong>Unit 3 第三单元</strong><span span-type="s">句子 Sentences</span></label>
 
                 <input type="checkbox" id="u4_w" value="4_w">
-                <label for="u4_w" class="unit-item"><strong>Unit 4 第四单元</strong><span>单词 Words</span></label>
+                <label for="u4_w" class="unit-item"><strong>Unit 4 第四单元</strong><span span-type="w">单词 Words</span></label>
                 
                 <input type="checkbox" id="u4_s" value="4_s">
-                <label for="u4_s" class="unit-item"><strong>Unit 4 第四单元</strong><span>句子 Sentences</span></label>
+                <label for="u4_s" class="unit-item"><strong>Unit 4 第四单元</strong><span span-type="s">句子 Sentences</span></label>
 
                 <input type="checkbox" id="u5_w" value="5_w">
-                <label for="u5_w" class="unit-item"><strong>Unit 5 第五单元</strong><span>单词 Words</span></label>
+                <label for="u5_w" class="unit-item"><strong>Unit 5 第五单元</strong><span span-type="w">单词 Words</span></label>
                 
                 <input type="checkbox" id="u5_s" value="5_s">
-                <label for="u5_s" class="unit-item"><strong>Unit 5 第五单元</strong><span>句子 Sentences</span></label>
+                <label for="u5_s" class="unit-item"><strong>Unit 5 第五单元</strong><span span-type="s">句子 Sentences</span></label>
 
                 <input type="checkbox" id="u6_w" value="6_w">
-                <label for="u6_w" class="unit-item"><strong>Unit 6 第六单元</strong><span>单词 Words</span></label>
+                <label for="u6_w" class="unit-item"><strong>Unit 6 第六单元</strong><span span-type="w">单词 Words</span></label>
                 
                 <input type="checkbox" id="u6_s" value="6_s">
-                <label for="u6_s" class="unit-item"><strong>Unit 6 第六单元</strong><span>句子 Sentences</span></label>
+                <label for="u6_s" class="unit-item"><strong>Unit 6 第六单元</strong><span span-type="s">句子 Sentences</span></label>
 
                 <input type="checkbox" id="u7_s" value="7_s">
-                <label for="u7_s" class="unit-item"><strong>拓展内容</strong><span>句子 Sentences</span></label>
+                <label for="u7_s" class="unit-item"><strong>拓展内容</strong><span span-type="s">句子 Sentences</span></label>
             </div>
             <div class="selection-bottom">
-                <button class="btn btn-secondary" style="flex:0.5" onclick="viewMistakeBook()">错题本</button>
-                <button class="btn btn-primary" style="flex:1" onclick="startGame()">开始练习</button>
+                <button class="btn btn-secondary" style="flex:0.4" onclick="viewMistakeBook()">错题本</button>
+                <button class="btn btn-primary" style="flex:1" onclick="startGame()">开始练习 🚀</button>
             </div>
         </div>
 
-        <!-- 卡片显示 -->
         <div id="game-screen">
             <div class="top-info">
                 <span>第 <b id="round-txt">1</b> 轮</span>
                 <span id="unit-txt">Unit 1</span>
-                <span>剩余: <b id="left-txt">10</b></span>
+                <span>剩余卡片: <b id="left-txt">10</b></span>
             </div>
 
             <div class="card-display" onclick="nextCard()">
@@ -574,25 +649,24 @@
 
             <div class="bottom-bar">
                 <button class="btn btn-ghost" style="flex:0.8" onclick="exitGame()">退出</button>
-                <button class="btn btn-ghost" style="flex:0.6" onclick="prevCard()">上一张</button>
-                <button class="btn btn-danger-soft" id="mistake-btn" style="flex:1.1" onclick="markMistake()">不认识</button>
-                <button class="btn btn-primary" style="flex:1.4" onclick="nextCard()">下一张</button>
+                <button class="btn btn-ghost" style="flex:0.8" onclick="prevCard()">上一张</button>
+                <button class="btn btn-danger-soft" id="mistake-btn" style="flex:1.2" onclick="markMistake()">🤔 不认识</button>
+                <button class="btn btn-primary" style="flex:1.5" onclick="nextCard()">下一张 →</button>
             </div>
         </div>
 
-        <!-- 错题本界面 -->
         <div id="mistake-screen">
             <div class="mistake-header">
-                <h2>错题本</h2>
+                <h2>生词错题本</h2>
                 <div class="badge" id="mistake-count">0个</div>
             </div>
             <div class="mistake-list" id="mistake-list-container">
-                <div class="mistake-empty">暂无错题</div>
+                <div class="mistake-empty">暂无错题，太棒了！🌟</div>
             </div>
             <div class="mistake-bottom">
-                <button class="btn btn-ghost" style="flex:1" onclick="backFromMistakeBook()">返回</button>
-                <button class="btn btn-primary" id="practice-mistake-btn" style="flex:1.3" onclick="startMistakePractice()">练习错题</button>
-                <button class="btn btn-danger" style="flex:1.1" onclick="clearMistakeBook()">清空</button>
+                <button class="btn btn-ghost" style="flex:1" onclick="backFromMistakeBook()">返回首页</button>
+                <button class="btn btn-primary" id="practice-mistake-btn" style="flex:1.4" onclick="startMistakePractice()">强化练习错题 🎯</button>
+                <button class="btn btn-danger" style="flex:1" onclick="clearMistakeBook()">清空本子</button>
             </div>
         </div>
     </div>
@@ -605,7 +679,6 @@
                 "It's Snowball. It's my dog.", "And it's Orange. It's my fish!", "It's Nini. It's my cat.", 
                 "It's my friend Liu Yun's cat."
             ],
-            
             "2_w":["animal", "they", "welcome", "zoo", "tiger", "lion", "bear", "monkey", "panda", "cute", "picture", "which", "from"],
             "2_s":[
                 "What are they?", "Welcome to the zoo!", "Look! A tiger.", "Look! Two lions.", 
@@ -613,7 +686,6 @@
                 "It's a tiger.", "They're lions.", "Look at the bears.", "They're big.", 
                 "They're monkeys.", "They're cute.", "Look at picture 1.", "What are they?", "Look at my zoo!"
             ],
-            
             "3_w":["face", "eye", "ear", "nose", "mouth", "we", "twin", "have", "small", "same", "know", "now", "long", "hair", "short", "different", "touch", "your"],
             "3_s":[
                 "My eyes.", "My ears.", "My nose.", "My mouth.", "This is my face!", "Hi, I'm Meimei.", 
@@ -624,7 +696,6 @@
                 "No, it's me!", "I have big eyes and big ears.", "My mouth and nose are small.", 
                 "I have a big mouth.", "I have a long nose.", "I have no ears."
             ],
-            
             "4_w":["body", "come on", "boy", "girl", "rock", "move", "head", "hand", "arm", "leg", "foot", "feet", "robot", "cool", "monster", "aunt", "her", "part", "toy", "his", "name", "he", "swim"],
             "4_s":[
                 "Come on, boys and girls.", "Let's do the body rock!", "Move your head.", "Move your hands.", 
@@ -637,7 +708,6 @@
                 "This girl swims fast.", "She has long arms.", "This boy runs fast.", "He has strong legs.", 
                 "This boy plays basketball well.", "He has big hands!"
             ],
-            
             "5_w":["home", "bed", "table", "sofa", "room", "sit down", "next", "day", "clean", "tidy", "OK", "amazing", "snow", "house", "tall", "live"],
             "5_s":[
                 "It's a bed.", "It's a table.", "It's a sofa.", "Big rooms.", "Small rooms.", "It's my home!", 
@@ -648,7 +718,6 @@
                 "This is my home. It's a snow house.", "Look at my room. It's small. It has a small table and a small bed.", 
                 "This is my home. It's a tulou. It's very big and tall!", "Many families live in a tulou. Look, it has so many rooms."
             ],
-            
             "6_w":["time", "tell", "Mr", "wolf", "eight", "nine", "ten", "eleven", "twelve", "birthday", "lunch", "not", "yet", "busy", "clock"],
             "6_s":[
                 "What's the time?", "Tell the time, Mr Wolf!", "It's eight.", "It's nine.", "It's ten.", 
@@ -657,7 +726,6 @@
                 "Dad is busy.", "I know!", "Happy Birthday", "Look at the pictures.", "Tell the time.", 
                 "Amazing clocks", "Big Ben, London", "The clock tower of the Customs House, Shanghai", "The Century Clock, Tianjin"
             ],
-            
             "7_s":[
                 "This is Shandong.", "Let's visit some famous houses in Shandong!", "It's Li Qingzhao's old home. It's nice.", 
                 "It's Wang Xizhi's old home. It's big!", "Look at the houses!", "They're cool.", "It's a seaweed house.", 
@@ -669,20 +737,16 @@
             ]
         };
 
-        // 错题本本地缓存配置
         const MISTAKE_STORAGE_KEY = 'yingyu_mistake_book';
-        const MISTAKE_EXPIRE_DAYS = 30; // 未登录情况下错题本缓存保留天数
+        const MISTAKE_EXPIRE_DAYS = 30;
 
         let playQueue = [];
         let index = 0;
         let round = 1;
-        let mistakeBook = loadMistakeBook(); // 启动时从本地缓存恢复
+        let mistakeBook = loadMistakeBook();
         let isMarked = false;
-        let isMistakePractice = false; // 是否处于"错题练习"模式
+        let isMistakePractice = false;
 
-        // ============ 工具函数 ============
-
-        // Fisher-Yates 洗牌算法
         function shuffle(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -690,12 +754,9 @@
             }
         }
 
-        // 获取单元显示名称
         function getUnitName(u) {
             if (!u) return "未知单元";
-            if (u === "7_s") {
-                return "拓展 句子";
-            }
+            if (u === "7_s") return "拓展 句子";
             let parts = u.split('_');
             if (parts.length < 2) return "Unit " + u;
             let unitNum = parts[0];
@@ -703,17 +764,13 @@
             return "Unit " + unitNum + " " + type;
         }
 
-        // Toast 提示
         let toastTimeout;
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.innerHTML = msg;
             toast.classList.add('show');
-            
             if (toastTimeout) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                hideToast();
-            }, 1500);
+            toastTimeout = setTimeout(() => { hideToast(); }, 1800);
         }
 
         function hideToast() {
@@ -722,9 +779,6 @@
             if (toastTimeout) clearTimeout(toastTimeout);
         }
 
-        // ============ 错题本本地缓存 ============
-
-        // 从 localStorage 读取错题本（带过期检查）
         function loadMistakeBook() {
             try {
                 const raw = localStorage.getItem(MISTAKE_STORAGE_KEY);
@@ -735,46 +789,32 @@
                 const savedAt = parsed.savedAt || 0;
                 const expireMs = MISTAKE_EXPIRE_DAYS * 24 * 60 * 60 * 1000;
                 if (savedAt && (now - savedAt > expireMs)) {
-                    // 超过保留期，清除过期数据
                     localStorage.removeItem(MISTAKE_STORAGE_KEY);
                     return [];
                 }
-                const list = Array.isArray(parsed.list) ? parsed.list.filter(m => m && m.t && m.u) : [];
-                return list;
-            } catch (e) {
-                return [];
-            }
+                return Array.isArray(parsed.list) ? parsed.list.filter(m => m && m.t && m.u) : [];
+            } catch (e) { return []; }
         }
 
-        // 保存错题本到 localStorage（每次保存刷新时间戳，活跃使用不会过期）
         function saveMistakeBook() {
             try {
                 if (!Array.isArray(mistakeBook) || mistakeBook.length === 0) {
                     localStorage.removeItem(MISTAKE_STORAGE_KEY);
                     return;
                 }
-                const payload = {
-                    savedAt: Date.now(),
-                    list: mistakeBook
-                };
+                const payload = { savedAt: Date.now(), list: mistakeBook };
                 localStorage.setItem(MISTAKE_STORAGE_KEY, JSON.stringify(payload));
-            } catch (e) {
-                // 隐私模式 / 存储空间不足时静默失败，不影响使用
-            }
+            } catch (e) {}
         }
-
-        // ============ 选择界面 ============
 
         function startGame() {
             const checks = document.querySelectorAll('input[type="checkbox"]:checked');
             if (checks.length === 0) { 
-                alert("请先选择您要练习的内容");
+                showToast("💡 请先挑选单元卡片哦");
                 return; 
             }
-
             hideToast();
             isMarked = false;
-
             playQueue = [];
             checks.forEach(c => {
                 const u = c.value;
@@ -782,31 +822,25 @@
                     data[u].forEach(txt => playQueue.push({t: txt, u: u}));
                 }
             });
-
             shuffle(playQueue);
             index = 0;
             round = 1;
-
             document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
             render();
         }
 
-        // ============ 游戏界面 ============
-
         function nextCard() {
             hideToast();
             isMarked = false;
             document.getElementById('mark-hint').innerText = '';
-
             index++;
             if (index >= playQueue.length) {
                 if (isMistakePractice) {
-                    // 错题练习一轮结束
                     if (mistakeBook.length === 0) {
-                        showToast('错题全部掌握！');
+                        showToast('🎉 错题全部掌握！太棒了！');
                     } else {
-                        showToast('本轮练习完成<br><span style="font-size:1.1rem;color:#6b7280;">还剩 ' + mistakeBook.length + ' 题继续加油</span>');
+                        showToast('👏 本轮错题练习完成<br><span style="font-size:1rem;color:#94a3b8;">还剩 ' + mistakeBook.length + ' 个，继续加油</span>');
                     }
                     setTimeout(() => exitGame(), 1800);
                     return;
@@ -814,7 +848,7 @@
                 round++;
                 index = 0;
                 shuffle(playQueue);
-                showToast("第 " + (round - 1) + " 轮完成<br><span style='font-size:1.1rem; color:#6b7280;'>开启第 " + round + " 轮</span>");
+                showToast("✨ 第 " + (round - 1) + " 轮练习挑战成功！<br><span style='font-size:1rem; color:#94a3b8;'>马上开启第 " + round + " 轮</span>");
             }
             render();
         }
@@ -823,11 +857,8 @@
             hideToast();
             isMarked = false;
             document.getElementById('mark-hint').innerText = '';
-
             index--;
-            if (index < 0) {
-                index = playQueue.length - 1;
-            }
+            if (index < 0) { index = playQueue.length - 1; }
             render();
         }
 
@@ -835,19 +866,17 @@
             const item = playQueue[index];
             if (!item) return;
 
-            // 错题练习模式：点击表示"已掌握"，从错题本移除并进入下一题
             if (isMistakePractice) {
                 mistakeBook = mistakeBook.filter(m => !(m && m.t === item.t && m.u === item.u));
                 saveMistakeBook();
                 if (mistakeBook.length === 0) {
-                    showToast('错题全部掌握！');
+                    showToast('🎉 错题全部学会啦！');
                     setTimeout(() => exitGame(), 1500);
                     return;
                 }
-                // 前进到下一题（不调用 nextCard 以保留进度反馈）
                 index++;
                 if (index >= playQueue.length) {
-                    showToast('本轮练习完成<br><span style="font-size:1.1rem;color:#6b7280;">还剩 ' + mistakeBook.length + ' 题继续加油</span>');
+                    showToast('👏 本轮练习完成<br><span style="font-size:1rem;color:#94a3b8;">还剩 ' + mistakeBook.length + ' 题</span>');
                     setTimeout(() => exitGame(), 1800);
                     return;
                 }
@@ -859,16 +888,12 @@
             if (isMarked) {
                 mistakeBook = mistakeBook.filter(m => !(m && m.t === item.t && m.u === item.u));
                 isMarked = false;
-                document.getElementById('mark-hint').innerText = '已取消标记';
+                document.getElementById('mark-hint').innerText = '已取消记入错题';
             } else {
                 const existing = mistakeBook.find(m => m && m.t === item.t && m.u === item.u);
-                if (existing) {
-                    existing.count++;
-                } else {
-                    mistakeBook.push({t: item.t, u: item.u, count: 1});
-                }
+                if (existing) { existing.count++; } else { mistakeBook.push({t: item.t, u: item.u, count: 1}); }
                 isMarked = true;
-                document.getElementById('mark-hint').innerText = '已标记为不认识';
+                document.getElementById('mark-hint').innerText = '❌ 已记入生词错题本';
             }
             saveMistakeBook();
         }
@@ -876,21 +901,16 @@
         function render() {
             const item = playQueue[index];
             if (!item) return;
-
             const textEl = document.getElementById('text-content');
-
-            // 写入文本
             textEl.innerText = item.t;
 
-            // 单元信息
             if (isMistakePractice) {
-                document.getElementById('unit-txt').innerText = '错题练习';
+                document.getElementById('unit-txt').innerText = '🔥 错题特训模式';
             } else {
                 document.getElementById('unit-txt').innerText = getUnitName(item.u);
             }
             document.getElementById('round-txt').innerText = round;
 
-            // 剩余数量：练习模式显示错题本剩余，普通模式显示队列剩余
             if (isMistakePractice) {
                 document.getElementById('left-txt').innerText = mistakeBook.length;
             } else {
@@ -898,7 +918,6 @@
                 document.getElementById('left-txt').innerText = left < 0 ? 0 : left;
             }
 
-            // 重置标记状态显示
             if (Array.isArray(mistakeBook)) {
                 isMarked = mistakeBook.some(m => m && m.t === item.t && m.u === item.u);
             } else {
@@ -908,10 +927,9 @@
 
             const markHint = document.getElementById('mark-hint');
             if (isMistakePractice) {
-                // 练习模式不显示"已标记"提示，避免误导
                 markHint.innerText = '';
             } else if (isMarked) {
-                markHint.innerText = '已标记为不认识';
+                markHint.innerText = '❌ 已记入生词错题本';
             } else {
                 markHint.innerText = '';
             }
@@ -920,25 +938,21 @@
         function exitGame() {
             isMistakePractice = false;
             const mistakeBtn = document.getElementById('mistake-btn');
-            if (mistakeBtn) mistakeBtn.innerText = '不认识';
+            if (mistakeBtn) mistakeBtn.innerText = '🤔 不认识';
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('selection-screen').style.display = 'flex';
         }
-
-        // ============ 错题本 ============
 
         function viewMistakeBook() {
             const container = document.getElementById('mistake-list-container');
             const badge = document.getElementById('mistake-count');
             const practiceBtn = document.getElementById('practice-mistake-btn');
 
-            badge.innerText = mistakeBook.length + '个';
-            if (practiceBtn) {
-                practiceBtn.disabled = (!mistakeBook || mistakeBook.length === 0);
-            }
+            badge.innerText = mistakeBook.length + ' 个';
+            if (practiceBtn) { practiceBtn.disabled = (!mistakeBook || mistakeBook.length === 0); }
 
             if (mistakeBook.length === 0) {
-                container.innerHTML = '<div class="mistake-empty">暂无错题</div>';
+                container.innerHTML = '<div class="mistake-empty">暂无错题，太棒了！🌟</div>';
             } else {
                 let html = '';
                 mistakeBook.forEach(item => {
@@ -950,36 +964,29 @@
                                     <div class="text">${escapeHtml(item.t)}</div>
                                     <div class="unit">${unitName}</div>
                                 </div>
-                                <div class="count">${item.count || 1}</div>
+                                <div class="count">错误 ${item.count || 1} 次</div>
                             </div>
                         `;
                     }
                 });
                 container.innerHTML = html;
             }
-            
             document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('mistake-screen').style.display = 'flex';
         }
 
-        // 开始错题练习：用错题本内容构建练习队列
         function startMistakePractice() {
-            if (!mistakeBook || mistakeBook.length === 0) {
-                showToast('错题本还是空的哦~');
-                return;
-            }
+            if (!mistakeBook || mistakeBook.length === 0) { return; }
             hideToast();
             isMistakePractice = true;
             isMarked = false;
-
             playQueue = mistakeBook.map(m => ({t: m.t, u: m.u}));
             shuffle(playQueue);
             index = 0;
             round = 1;
 
-            // 切换"不认识"按钮为"已掌握"
             const mistakeBtn = document.getElementById('mistake-btn');
-            if (mistakeBtn) mistakeBtn.innerText = '已掌握';
+            if (mistakeBtn) mistakeBtn.innerText = '✅ 已经掌握';
 
             document.getElementById('mistake-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
@@ -992,7 +999,7 @@
         }
 
         function clearMistakeBook() {
-            if (confirm('确定要清空所有错题吗？')) {
+            if (confirm('确定要清空所有错题记录吗？')) {
                 mistakeBook = [];
                 saveMistakeBook();
                 viewMistakeBook();
@@ -1001,19 +1008,10 @@
 
         function escapeHtml(text) {
             if (!text) return '';
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return text.replace(/[&<>"']/g, m => map[m]);
         }
 
-        // ============ 监听器 ============
-
-        // 横屏自动隐藏遮罩
         window.addEventListener("orientationchange", function() {
             if (Math.abs(window.orientation) === 90) {
                  document.getElementById('orientation-hint').style.display='none';
